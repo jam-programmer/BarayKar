@@ -1,0 +1,115 @@
+﻿@model IEnumerable<EmploymentViewModel>
+
+
+
+
+<section class="section trend-part">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-center-heading">
+                    <h2>
+                      جدیدترین <span>آگهی‌های استخدام   </span>
+                    </h2>
+                    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. .</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+    
+            @foreach(var item in Model)
+            {
+                string path = "../Gallery/";
+                if (item.Image == "defaultAvatar.jpg" || item.Image == "notFound.jpg")
+                {
+                    path += item.Image;
+                }
+                else
+                {
+                    path += "Business/" + item.Image;
+                }
+
+
+                <div class="col-lg-6">
+                    <div class="product-card inline">
+                        <div class="product-head">
+                            <div class="product-img" style="background:url(@path) no-repeat center; background-size:cover;">
+                             
+                                <span class="flat-badge booking">کد: @item.Code </span>
+                                <ul class="product-meta">
+                                    <li>
+                                        <i class="fas fa-eye"></i>
+                                        <p>264</p>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-mouse"></i>
+                                        <p>134</p>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-star"></i>
+                                        <p>4.5/7</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-tag">
+                                <i class="fas fa-tags"></i>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a  asp-controller="Employment" asp-action="Detail" asp-route-Id="@item.Id">@item.BusinessAccountName </a>
+                                    </li>
+                                  
+                                </ol>
+                            </div>
+                            <div class="product-title">
+                                <h5>
+                                    <a asp-controller="Employment" asp-action="Detail" asp-route-Id="@item.Id">@item.Title</a>
+                                </h5>
+                                <ul class="product-location">
+                                    <li>
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <p>@item.ProvinceName - @item.CityName</p>
+                                    </li>
+                                  
+                                </ul>
+                            </div>
+                            <div class="product-details">
+                                <div class="product-price">
+                                    <h6>@item.Salary </h6>
+                                  
+                                </div>
+                                <ul class="product-widget">
+                                    <li>
+                                        <a asp-controller="Employment" asp-action="Detail" asp-route-Id="@item.Id" class="text-primary">
+                                           
+                                           مشاهده
+                                        </a>
+                                    </li>
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            }
+
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="center-20">
+                    <a asp-controller="Employment" asp-action="AllEmployment" class="btn btn-inline">
+                        <i class="fas fa-eye"></i>
+                        <span>مشاهده همه آگهی‌های استخدام</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+

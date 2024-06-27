@@ -1,0 +1,65 @@
+﻿@model Application.Cqrs.BusinessProperty.UpdateBusinessPropertyCommand
+@{
+    ViewData["Title"] = "ویرایش ویژگی";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+@section Script {
+
+    <partial name="_ValidationScriptsPartial" />
+}
+<div class="container">
+    <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="lh-1-85 breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">پیشخوان</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="BusinessProperty" asp-action="Index" asp-route-parentId="@Model.BusinessId">مدیریت ویژگی‌ها‌‌‌</a>
+                </li>
+                <li class="breadcrumb-item active">ویرایش ویژگی‌ </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-xl-6 col-lg-6 col-sm-12 offset-xl-3 offset-lg-3 offset-md-3">
+            <div class="card mb-4">
+                <form asp-area="Admin" asp-controller="BusinessProperty" asp-action="Edit">
+                    <h5 class="card-header heading-color">ویرایش ویژگی </h5>
+                    @if (ViewBag.Alert != null)
+                    {
+                        <div class="mx-3 alert alert-warning">@ViewBag.Alert</div>
+                    }
+                    <div class="card-body demo-vertical-spacing demo-only-element">
+                        <div class="row">
+
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">نام ویژگی </label>
+                                    <input asp-for="Key" type="text" class="form-control"
+                                           placeholder="پارکینگ اختصاصی">
+                                    <span class="text-danger" asp-validation-for="Key"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">مقدار ویژگی </label>
+                                    <input asp-for="Value" type="text" class="form-control"
+                                           placeholder="پارکینگ ندارد">
+                                    <span class="text-danger" asp-validation-for="Value"></span>
+                                </div>
+                            </div>
+                            <input type="hidden" asp-for="BusinessId" />    <input type="hidden" asp-for="Id" />
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-sm rounded-pill btn-success">ثبت</button>
+                        <a asp-area="Admin" asp-controller="BusinessProperty" asp-action="Index"
+                           asp-route-parentId="@Model.BusinessId"
+                           class="btn btn-sm rounded-pill btn-warning text-white">بازگشت</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

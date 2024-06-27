@@ -1,0 +1,624 @@
+﻿@model UpdateBusinessRecord
+@{
+    ViewData["Title"] = "ویرایش کسب و کار";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style {
+    <link rel="stylesheet" href="~/assets/vendor/libs/select2/select2.css">
+    <link rel="stylesheet" href="~/main/css/custom/ad-post.css">
+    <link rel="stylesheet" href="~/main/css/custom/profile.css">
+    <link rel="stylesheet" href="~/map/leaflet.css" />
+    <style>
+        #map {
+            height: 400px;
+        }
+
+        .select2-selection__rendered {
+            background-color: #eceff1;
+            border-radius: 15px;
+            padding: 10px;
+        }
+
+        .select2-dropdown {
+            background-color: #eceff1;
+            border-radius: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 3px 3px 9px 9px;
+            margin-top: 12px;
+        }
+
+        .select2-search__field {
+            border: none;
+        }
+    </style>
+}
+@section Script {
+    <script src="~/assets/vendor/libs/select2/select2.js"></script>
+    <script src="~/map/leaflet.js"></script>
+    <script src="~/assets/js/upload.js"></script>
+    <script src="~/js/site.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/rest.js"></script>
+    <script>
+        var map = L.map('map').setView([@Model.Latitude, @Model.Longitude], 12);
+        var marker;
+
+        map.on('click', function (e) {
+            var lat = e.latlng.lat.toFixed(6);
+            var lng = e.latlng.lng.toFixed(6);
+            document.getElementById('lat').value = lat;
+            document.getElementById('lng').value = lng;
+
+            if (marker) {
+                map.removeLayer(marker);
+            }
+
+            marker = L.marker([lat, lng]).addTo(map);
+        });
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+    </script>
+    <script>
+        function previewImages() {
+
+            var preview = document.getElementById('preview');
+            var files = document.getElementById('upload').files;
+
+            preview.innerHTML = '';
+
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                var imageType = /image.*/;
+
+                if (!file.type.match(imageType)) {
+                    continue;
+                }
+
+                var img = document.createElement('img');
+                img.file = file;
+                img.style.maxWidth = '50px';
+                img.style.maxHeight = '50px';
+                img.className = "m-1 rounded border img-fluid img-thumbnail";
+                preview.appendChild(img);
+
+                var reader = new FileReader();
+                reader.onload = (function (aImg) { return function (e) { aImg.src = e.target.result; }; })(img);
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+    <script>
+
+        function RemoveCurrentKeyValue(id) {
+            debugger;
+            var json = document.getElementById("JsonDeleteKeyValue").value;
+            if (!json) {
+                var obj = [];
+                json = JSON.stringify(obj);
+            }
+            var data = JSON.parse(json);
+            var newObj = {
+                Id: id
+            }
+            data.push(newObj);
+            var updatedJson = JSON.stringify(data);
+            document.getElementById("JsonDeleteKeyValue").value = updatedJson;
+
+            var item = document.getElementById("Item_" + id);
+            if (item) {
+                item.style.display = "none";
+            }
+        }
+
+        function RemoveCurrentImage(id) {
+            var json = document.getElementById("JsonDeleteImage").value;
+            if (!json) {
+                var obj = [];
+                json = JSON.stringify(obj);
+            }
+            var data = JSON.parse(json);
+            var newObj = {
+                Id: id
+            }
+            data.push(newObj);
+            var updatedJson = JSON.stringify(data);
+            document.getElementById("JsonDeleteImage").value = updatedJson;
+            var item = document.getElementById("Item_" + id);
+            if (item) {
+                item.style.display = "none";
+            }
+        }
+        function RemoveCurrentTime(id) {
+            var json = document.getElementById("JsonDeleteTime").value;
+            if (!json) {
+                var obj = [];
+                json = JSON.stringify(obj);
+            }
+            var data = JSON.parse(json);
+            var newObj = {
+                Id: id
+            }
+            data.push(newObj);
+            var updatedJson = JSON.stringify(data);
+            document.getElementById("JsonDeleteTime").value = updatedJson;
+            var item = document.getElementById("Item_" + id);
+            if (item) {
+                item.style.display = "none";
+            }
+        }
+
+        function AppendKeyValue() {
+            var itemkey = document.getElementById("Key").value;
+            var itemValue = document.getElementById("Value").value;
+            var itemId = RandomId();
+            var body = document.getElementById("KeyValueBody");
+            var json = document.getElementById("KeyValueJson").value;
+            if (!json) {
+                var obj = [];
+                json = JSON.stringify(obj);
+            }
+            var data = JSON.parse(json);
+            var newObj = {
+                Id: itemId,
+                Key: itemkey,
+                Value: itemValue
+            }
+            data.push(newObj);
+            var updatedJson = JSON.stringify(data);
+            document.getElementById("KeyValueJson").value = updatedJson;
+
+            var tr = document.createElement("tr");
+            tr.id = "tr_" + itemId;
+            var tdKey = document.createElement("td");
+            var tdValue = document.createElement("td");
+            var tdDeleteBtn = document.createElement("a");
+            var deleteBtn = document.createElement("a");
+            deleteBtn.setAttribute('onclick', 'RemoveKeyValue("' + itemId + '")');
+
+
+            deleteBtn.innerHTML = '<i class="fa-solid fa-xmark text-white p-1 mt-1 mb-1 rounded bg-danger"></i>';
+            tdKey.innerHTML = itemkey;
+            tdValue.innerHTML = itemValue;
+            tdDeleteBtn.appendChild(deleteBtn);
+            tr.appendChild(tdKey);
+            tr.appendChild(tdValue);
+            tr.appendChild(tdDeleteBtn);
+            body.appendChild(tr);
+            document.getElementById("Key").value = "";
+            document.getElementById("Value").value = "";
+        }
+        function RemoveKeyValue(id) {
+
+            var json = document.getElementById("KeyValueJson").value;
+
+            var data = JSON.parse(json);
+            var updatedJson = data.filter(item => item.Id !== id);
+
+            document.getElementById("KeyValueJson").value = JSON.stringify(updatedJson);
+
+            var trItem = document.getElementById("tr_" + id);
+            if (trItem) {
+                trItem.parentNode.removeChild(trItem);
+            }
+        }
+
+        function AppendTime() {
+            var itemDay = document.getElementById("Day").value;
+            var itemTime = document.getElementById("Time").value;
+            var itemId = RandomId();
+            var body = document.getElementById("TimeBody");
+            var json = document.getElementById("TimeJson").value;
+            if (!json) {
+                var obj = [];
+                json = JSON.stringify(obj);
+            }
+            var data = JSON.parse(json);
+            var newObj = {
+                Id: itemId,
+                Key: itemDay,
+                Value: itemTime
+            }
+            data.push(newObj);
+            var updatedJson = JSON.stringify(data);
+            document.getElementById("TimeJson").value = updatedJson;
+
+            var tr = document.createElement("tr");
+            tr.id = "tr_" + itemId;
+            var tdDay = document.createElement("td");
+            var tdTime = document.createElement("td");
+            var tdDeleteBtn = document.createElement("a");
+            var deleteBtn = document.createElement("a");
+            deleteBtn.setAttribute('onclick', 'RemoveTime("' + itemId + '")');
+
+
+            deleteBtn.innerHTML = '<i class="fa-solid fa-xmark text-white p-1 mt-1 mb-1 rounded bg-danger"></i>';
+            tdDay.innerHTML = itemDay;
+            tdTime.innerHTML = itemTime;
+            tdDeleteBtn.appendChild(deleteBtn);
+            tr.appendChild(tdDay);
+            tr.appendChild(tdTime);
+            tr.appendChild(tdDeleteBtn);
+            body.appendChild(tr);
+            document.getElementById("Day").value = "";
+            document.getElementById("Time").value = "";
+        }
+        function RemoveTime(id) {
+
+            var json = document.getElementById("TimeJson").value;
+
+            var data = JSON.parse(json);
+            var updatedJson = data.filter(item => item.Id !== id);
+
+            document.getElementById("TimeJson").value = JSON.stringify(updatedJson);
+
+            var trItem = document.getElementById("tr_" + id);
+            if (trItem) {
+                trItem.parentNode.removeChild(trItem);
+            }
+        }
+
+        function ChangeProvince() {
+            var province = document.getElementById("province"); var city = document.getElementById("city");
+
+            var request = { id: province.value }; var url = '/User/Dashboard/Cities';
+            rest.postAsync(url, null, request, function (isSuccess, response) {
+                if (isSuccess) {
+                    city.innerHTML = "";
+                    var optionDefault = document.createElement("option");
+                    optionDefault.innerHTML = 'یک گزینه انتخاب کنید.';
+                    optionDefault.setAttribute("disabled", "disabled");
+                    optionDefault.setAttribute("selected", "selected");
+                    city.appendChild(optionDefault);
+
+                    response.forEach((cityItem) => {
+                        var option = document.createElement("option");
+                        option.value = cityItem.id;
+                        option.innerHTML = cityItem.title;
+                        city.appendChild(option);
+                    });
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $('.select2').select2();
+        });
+        $(document).ready(function () {
+            $('.select2').select2();
+        });
+        $(document).ready(function () {
+            $('.select2').select2();
+        });
+
+    </script>
+}
+<section class="single-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="single-content">
+                    <h2>پروفایل</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="index.html">صفحه اصلی</a>
+                        </li>
+                        <li class="breadcrumb-item" aria-current="page">کسب و کارهای من</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="dash-header-part">
+    <div class="container">
+        <div class="row">
+
+            @await Component.InvokeAsync("UserInformationComponent", Guid.Parse(User.FindFirstValue("Id")!))
+
+            @await Component.InvokeAsync("UserStatisticalInformationComponent", Guid.Parse(User.FindFirstValue("Id")!))
+
+        </div>
+        @await Component.InvokeAsync("UserDashboardMenuComponent")
+
+    </div>
+</section>
+<section>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-12 mb-5 mt-5">
+
+                <form asp-area="User" asp-controller="Dashboard" asp-action="EditBusiness" enctype="multipart/form-data">
+                    <div class="adpost-card">
+                        <div class="adpost-title">
+                            <h3> ویرایش کسب و کار  </h3>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">نام کسب و کار</label>
+                                    <input asp-for="AccountName" type="text" class="form-control">
+                                </div>
+                                <span class="text-danger" asp-validation-for="AccountName"></span>
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">لینک سایت</label>
+                                    <input asp-for="Link" type="url" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">ایمیل</label>
+                                    <input asp-for="Email" type="email" class="form-control">
+                                </div>          <span class="text-danger" asp-validation-for="Email"></span>
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">شماره تماس </label>
+                                    <input asp-for="PhoneNumber" type="tel" class="form-control">
+                                </div>          <span class="text-danger" asp-validation-for="PhoneNumber"></span>
+                            </div>
+
+
+
+
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">  اینستاگرام </label>
+                                    <input asp-for="Instagram" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">  واتساپ </label>
+                                    <input asp-for="WhatsApp" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">  لینکدین </label>
+                                    <input asp-for="Linkdin" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">  فیسبوک </label>
+                                    <input asp-for="FaceBook" type="text" class="form-control">
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">درباره</label>
+                                    <textarea asp-for="About" class="form-control" rows="4"></textarea>
+                                </div>          <span class="text-danger" asp-validation-for="About"></span>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">نشانی</label>
+                                    <textarea asp-for="Address" class="form-control" rows="4"></textarea>
+                                </div>
+                            </div>
+                           
+
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div class="form-group ">
+                                    <label>دسته بندی</label>
+                                    <select asp-for="CategoryId" id="category" asp-items="@ViewBag.Categories" class="select2">
+                                        <option selected disabled>انتخاب دسته بندی</option>
+
+                                    </select>
+                                </div>          <span class="text-danger" asp-validation-for="CategoryId"></span>
+                            </div>
+
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div class="form-group ">
+                                    <label>استان</label>
+                                    <select asp-for="ProvinceId" id="province" onchange="ChangeProvince()" asp-items="@ViewBag.Province" class="form-control select2">
+                                        <option selected disabled>انتخاب استان</option>
+
+                                    </select>
+                                </div>          <span class="text-danger" asp-validation-for="ProvinceId"></span>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div class="form-group ">
+                                    <label>شهر</label>
+                                    <select asp-for="CityId" asp-items="@ViewBag.City" id="city" class="form-control select2">
+                                        <option selected disabled>انتخاب شهر</option>
+
+                                    </select>
+                                </div>          <span class="text-danger" asp-validation-for="CityId"></span>
+                            </div>
+                            <div class="col-xl-12 col-lg12 col-md-12 col-sm-12">
+                                <label for="exampleFormControlInput1">  تصاویر  </label>
+                                <div class="form-group mt-2" style="display: flex;">
+
+
+                                    @if (Model.Pictures != null && Model.Pictures.Any())
+                                    {
+                                        @foreach (var item in Model.Pictures!)
+                                        {
+                                            <div id="Item_@item.Id" class="border shadow rounded mx-2">
+                                                <a onclick="RemoveCurrentImage('@item.Id')"><i class="text-danger fa-solid fa-xmark mx-2"></i></a>
+
+                                                @if (item.Image == "defaultAvatar.jpg" || item.Image == "notFound.jpg")
+                                                {
+                                                    <img src="~/Gallery/defaultAvatar.jpg"
+                                                         width="50" height="50"
+                                                         class="m-1 rounded border img-fluid img-thumbnail" />
+
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/Gallery/Business/@item.Image" width="50" height="50"
+                                                         class="m-1 rounded border img-fluid img-thumbnail" />
+
+                                                }
+                                            </div>
+                                        }
+                                    }
+
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">  بارگذاری تصاویر </label>
+                                    <input asp-for="Files" type="file" id="upload" onchange="previewImages()" multiple class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-xl-9 col-lg-9 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">   تصاویر بارگذاری شده </label>
+                                    <div id="preview"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-6 col-sm-12">
+                                <div class="form-group ">
+                                    <div style="z-index:0" id="map"></div>
+                                    <input type="hidden" asp-for="Latitude" class="form-control" id="lat">
+                                    <input type="hidden" asp-for="Longitude" class="form-control" id="lng">
+                                </div>
+
+                            </div>
+                        </div>
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+
+                                    <th scope="col">عنوان</th>
+                                    <th scope="col">ویژگی</th>
+                                    <th scope="col">حذف</th>
+                                </tr>
+                            </thead>
+                            <tbody id="KeyValueBody">
+                                @if (Model.Properties != null && Model.Properties.Any())
+                                {
+                                    @foreach (var item in Model.Properties)
+                                    {
+                                        <tr id="Item_@item.Id">
+                                            <td>@item.Key</td>
+                                            <td>@item.Value</td>
+                                            <td>
+                                                <a onclick="RemoveCurrentKeyValue('@item.Id')">
+                                                    <i class="fa-solid fa-xmark text-white p-1 mt-1 mb-1 rounded bg-danger"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+
+
+                        <div class="row">
+                           
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">  عنوان </label>
+                                    <input type="text" class="form-control" id="Key" placeholder="مثال:مجوز">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">  ویژگی </label>
+                                    <input type="text" class="form-control" id="Value" placeholder="‌مثال:اتاق اصناف ایران">
+                                </div>
+                            </div>
+                        </div>   <a class="btn btn-sm btn-danger text-white mb-5" onclick="AppendKeyValue()">ایجاد ویژگی</a>
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+
+                                    <th scope="col">روز </th>
+                                    <th scope="col">ساعت کاری</th>
+                                    <th scope="col">حذف</th>
+                                </tr>
+                            </thead>
+                            <tbody id="TimeBody">
+                                @if (Model.Times != null && Model.Times.Any())
+                                {
+                                    @foreach (var item in Model.Times)
+                                    {
+                                        <tr id="Item_@item.Id">
+                                            <td>
+                                                @switch (item.Day)
+                                                {
+                                                    case Day.Monday:
+                                                        <span>دوشنبه</span>
+                                                        break;
+                                                    case Day.Wednesday:
+                                                        <span>چهارشنبه</span>
+                                                        break;
+                                                    case Day.Friday:
+                                                        <span>جمعه</span>
+                                                        break;
+                                                    case Day.Thursday:
+                                                        <span>پنجشنبه</span>
+                                                        break;
+
+                                                    case Day.Sunday:
+                                                        <span>یکشنبه</span>
+                                                        break;
+                                                    case Day.Saturday:
+                                                        <span>شنبه</span>
+                                                        break;
+                                                    case Day.Tuesday:
+                                                        <span>سه شنبه</span>
+                                                        break;
+                                                }
+
+                                            </td>
+                                            <td>@item.Time</td>
+                                            <td>
+                                                <a onclick="RemoveCurrentTime('@item.Id')">
+                                                    <i class="fa-solid fa-xmark text-white p-1 mt-1 mb-1 rounded bg-danger"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                         <input type="hidden"  asp-for="UserId" />
+                        <input type="hidden" id="KeyValueJson" asp-for="JsonKeyValue" />
+                        <input type="hidden" id="TimeJson" asp-for="JsonTime" />
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" id="JsonDeleteImage" asp-for="JsonRemoveImage" />
+                        <input type="hidden" id="JsonDeleteTime" asp-for="JsonRemoveTime" />
+                        <input type="hidden" id="JsonDeleteKeyValue" asp-for="JsonRemoveKeyValue" />
+                        <div class="row">
+                            
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group ">
+                                    <label>روز هفته</label>
+                                    <select id="Day" asp-items="Html.GetEnumSelectList<Day>()" class="form-control ">
+                                        <option selected disabled>انتخاب روز</option>
+
+                                    </select>
+                                </div>
+                            </div> <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">  ساعات کاری </label>
+                                    <input id="Time" type="text" class="form-control">
+                                </div>
+                            </div>
+
+                        </div> <a class="btn btn-sm btn-warning text-white mb-5" onclick="AppendTime()">ایجاد ساعت کاری</a>
+                        <hr />
+                        <button type="submit" class="btn btn-sm btn-primary text-white mb-5">ثبت</button>
+                    </div>
+                </form>
+            </div>
+</section>

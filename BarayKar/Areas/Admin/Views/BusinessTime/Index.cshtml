@@ -1,0 +1,141 @@
+﻿@model Application.Common.Model.PaginatedList<Application.Cqrs.BusinessTime.BusinessTimeViewModel>
+@{
+    ViewData["Title"] = "مدیریت ساعات کاری";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Script {
+    <script src="~/assets/js/pagination.js"></script>
+    <script src="~/assets/js/alert.js"></script>
+}<div class="container">
+    <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="lh-1-85 breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">پیشخوان</a>
+                </li>
+
+                <li class="breadcrumb-item active"> مدیریت  ساعات کاری </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="card">
+            <div class="card-header ">
+                <h5 class="heading-color"> مدیریت  ساعات کاری</h5>
+
+                <form asp-controller="BusinessTime" asp-area="Admin" asp-action="Index" method="get"
+                      class="row mt-3 shadow-lg p-3 mb-3 bg-white rounded p-3"
+                      style="background-color:#ececec !important">
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                        <a asp-controller="Business" asp-area="Admin" asp-action="Index"
+                           class="btn btn-sm btn-primary p-1 text-white"><i class="fa-solid fa-arrow-right"></i></a>
+                        <a asp-area="Admin" asp-controller="BusinessTime" asp-action="Create"
+                           asp-route-ParentId="@ViewBag.Parent"
+                           class="btn btn-sm btn-success text-white">ایجاد ساعت کاری‌ جدید</a>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                        <input name="keyword" type="search" class="form-control form-control-sm" placeholder="جستجو ..."
+                               aria-controls="DataTables_Table_3">
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                        <button type="submit" class="btn btn-sm btn-info text-white"><i class="bx bx-search"></i></button>
+                        <a asp-controller="BusinessTime" asp-area="Admin" asp-action="Index"
+                           asp-route-parentId="@ViewBag.Parent"
+                           class="btn btn-sm btn-warning text-white"><i class="bx bx-refresh"></i></a>
+
+
+                    </div>
+                    <input type="hidden" name="CurentPage" />
+                    <input type="hidden" name="Keyword" />
+                    <input type="hidden" name="ParentId" value="@ViewBag.Parent" />
+                </form>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive text-nowrap">
+                    <table class="table">
+                        <thead>
+                            <tr>
+
+                                <th>روز</th>
+                                <th>ساعت کاری</th>
+
+                                <th>عملیات</th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+
+                            @foreach (var item in Model.List!)
+                            {
+                                <tr id="Item_@item.Id">
+
+
+                                    <td>
+                                        @switch(item.Day)
+                                        {
+                                            case Day.Monday:
+                                               <span>دوشنبه</span>
+                                                break;
+
+                                            case Day.Tuesday:
+                                                <span>سه‌شنبه</span>
+                                                break;
+
+                                            case Day.Wednesday:
+                                                <span>چهارشنبه</span>
+                                                break;
+
+                                            case Day.Thursday:
+                                               <span>پنجشنبه</span>
+                                                break;
+
+                                            case Day.Friday:
+                                                <span>جمعه</span>
+                                                break;
+
+                                            case Day.Saturday:
+                                               <span>شنبه</span>
+                                                break;
+
+                                            case Day.Sunday:
+                                               <span>یکشنبه</span>
+                                                break;
+                                        }
+                                       
+                                    </td>
+
+                                    <td>
+                                        @item.Time
+                                    </td>
+
+                                    <td>
+
+                                        <a class="btn btn-sm btn-warning text-white p-1" asp-controller="BusinessTime" asp-action="Edit" asp-route-id="@item.Id" asp-route-Parent="@ViewBag.Parent"><i class="bx bx-edit-alt me-1"></i> </a>
+                                        <a onclick="RemoveModal('پاک کردن ‌ساعت کاری‌','آیا ساعت کاری حذف شود؟','BusinessTime','Delete','@item.Id')" class="btn btn-sm btn-danger text-white p-1"><i class="bx bx-trash me-1"></i> </a>
+
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    @if (Model.TotalPage > 1)
+                    {
+                        <div id="paginationSection"
+                             data-controller-name="BusinessTime"
+                             data-action-name="Index"
+                             data-keyword="@Model.Keyword"
+                             data-pageSize="@Model.PageSize"
+                             data-current-page="@Model.CurentPage"
+                             data-total-pages="@Model.TotalPage"
+                             data-parent="@ViewBag.Parent">
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

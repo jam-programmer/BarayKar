@@ -1,0 +1,36 @@
+﻿@model IEnumerable<ParentCategoryViewModel>
+
+<section class="suggest-part">
+    <div class="container">
+        <div class="suggest-slider">
+        
+            @foreach(var item in Model)
+            {
+                <div class="suggest-card">
+                    <a href="/Business/AllBusiness?category=@item.Id">
+                    <div class="suggest-img">
+
+                        @if (item.Image == "defaultAvatar.jpg" || item.Image == "notFound.jpg")
+                        {
+                            <img src="~/Gallery/@item.Image" alt="@item.Name">
+                        }
+                        else
+                        {
+                            <img src="~/Gallery/Category/@item.Image" alt="@item.Name">
+                        }
+                        
+                    </div>
+                    <div class="suggest-meta">
+                        <h6>
+                            @item.Name
+                        </h6>
+                        <p>(@item.Count) کسب و کارها </p>
+                        </div>
+                    </a>
+                </div>
+
+            }
+
+        </div>
+    </div>
+</section>

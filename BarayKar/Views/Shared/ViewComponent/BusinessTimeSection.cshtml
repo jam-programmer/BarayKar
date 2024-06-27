@@ -1,0 +1,53 @@
+﻿@model List<TimeBusinessViewModel>
+
+
+<div class="ad-details-card">
+    <div class="ad-details-title">
+        <h5>ساعات کاری</h5>
+    </div>
+    <div class="ad-details-opening">
+        <ul>
+           
+            @foreach(var item in Model)
+            {
+                <li>
+                    <h6>
+                        @switch (item.Day)
+                        {
+                            case Day.Monday:
+                                <span>دوشنبه</span>
+                                break;
+
+                            case Day.Tuesday:
+                                <span>سه‌شنبه</span>
+                                break;
+
+                            case Day.Wednesday:
+                                <span>چهارشنبه</span>
+                                break;
+
+                            case Day.Thursday:
+                                <span>پنجشنبه</span>
+                                break;
+
+                            case Day.Friday:
+                                <span>جمعه</span>
+                                break;
+
+                            case Day.Saturday:
+                                <span>شنبه</span>
+                                break;
+
+                            case Day.Sunday:
+                                <span>یکشنبه</span>
+                                break;
+                        }
+
+                    </h6>
+                    <p>@item.Time</p>
+                </li>
+            }
+
+        </ul>
+    </div>
+</div>

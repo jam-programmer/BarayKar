@@ -1,0 +1,24 @@
+﻿@model List<PictureBusinessViewModel>
+<div class="ad-details-slider slider-arrow slick-initialized slick-slider mb-5">
+    <div class="swiffy-slider slider-nav-autoplay slider-nav-caretfill">
+        <ul class="slider-container">
+
+            @foreach (var item in Model)
+            {
+                <li><img src="~/Gallery/Business/@item.Image" style="max-width: 100%;height: auto; border-radius: 20px;"></li>
+
+            }
+        </ul>
+
+        <button type="button" class="slider-nav"></button>
+        <button type="button" class="slider-nav slider-nav-next"></button>
+
+        <div class="slider-indicators">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <button @(i == 0 ? "class=\"active\"" : "")></button>
+            }
+        </div>
+    </div>
+
+</div>

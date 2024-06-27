@@ -1,0 +1,711 @@
+﻿@model BusinessDetailViewModel
+@{
+    ViewData["Title"] = "Deatil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Style{
+
+
+
+
+    <script src="~/js/swiffy-slider.min.js" crossorigin="anonymous" defer></script>
+    <link href="~/css/swiffy-slider.min.css" rel="stylesheet" crossorigin="anonymous">
+
+
+
+    <link rel="stylesheet" href="~/main/fonts/flaticon/flaticon.css">
+    <link rel="stylesheet" href="cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <link rel="stylesheet" href="~/main/css/vendor/jquery-ui.min.css">
+    <link rel="stylesheet" href="~/main/css/vendor/slick.min.css">
+    <link rel="stylesheet" href="~/main/css/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="~/main/css/custom/main.css">
+    <link rel="stylesheet" href="~/main/css/custom/rightbar-details.css">
+}
+@section Script{
+    <script src="~/main/js/vendor/jquery-1.12.4.min.js"></script>
+    <script src="~/main/js/vendor/popper.min.js"></script>
+    <script src="~/main/js/vendor/bootstrap.min.js"></script>
+    <script src="~/main/js/vendor/jquery-ui.min.js"></script>
+    <script src="~/main/js/custom/price-range.js"></script>
+    <script src="~/main/js/vendor/slick.min.js"></script>
+    <script src="~/main/js/custom/slick.js"></script>
+    <script src="~/main/js/custom/main.js"></script>
+}
+<section class="single-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="single-content">
+                    <h2>جزئیات نوار چپ</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="index.html">صفحه اصلی</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="rightbar-list.html">لیست نوار چپ</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">جزئیات نوار چپ</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="ad-details-part">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="ad-details-card">
+
+                    <div class="ad-details-breadcrumb">
+                        <ol class="breadcrumb">
+                            <li>
+                                <span class="flat-badge sale">@Model.CategoryName</span>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a>کد:@Model.Code </a>
+                            </li>
+                        </ol>
+                    </div>
+                    <div class="ad-details-heading">
+                        <h2>
+                            @Model.AccountName
+                        </h2>
+                    </div>
+                    @* <ul class="ad-details-meta">
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-eye"></i>
+                                <p>
+                                    پیش نمایش <span>(134)</span>
+                                </p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-mouse"></i>
+                                <p>
+                                    کلیک <span>(76)</span>
+                                </p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-star"></i>
+                                <p>
+                                    مرور <span>(29)</span>
+                                </p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-heart"></i>
+                                <p>
+                                    نشانک <span>(15)</span>
+                                </p>
+                            </a>
+                        </li>
+                    </ul> *@
+
+                    @await Component.InvokeAsync("BusinessPictureComponent", ViewBag.Id)
+                    
+                    <div class="ad-details-action">
+                        <ul>
+                            <li>
+                                <button type="button">
+                                    <i class="fas fa-heart"></i>
+                                    <span>نشانک </span>
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <span>گزارش </span>
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button">
+                                    <i class="fas fa-share-alt"></i>
+                                    <span>اشتراک </span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+                @await Component.InvokeAsync("BusinessPropertyComponent", ViewBag.Id)
+
+
+
+
+
+
+
+                <div class="ad-details-card">
+                    <div class="ad-details-title">
+                        <h5>توضیحات </h5>
+                    </div>
+                    <div class="ad-details-descrip">
+                        <p>
+                          @Model.About    </p>
+                    </div>
+                </div>
+                <div class="ad-details-card">
+                    <div class="ad-details-title">
+                        <h5>نظر (2)</h5>
+                    </div>
+                    <div class="ad-details-review">
+                        <ul class="review-list">
+                            <li class="review-item">
+                                <div class="review-author">
+                                    <div class="review-avatar">
+                                        <a href="#">
+                                            <img src="images/avatar/02.jpg" alt="review">
+                                        </a>
+                                    </div>
+                                    <div class="review-meta">
+                                        <h6>
+                                            <a href="#">لوبانو خان </a>- <span>اسفند 1399</span>
+                                        </h6>
+                                        <ul>
+                                            <li>
+                                                <i class="fas fa-star active"></i>
+                                            </li>
+                                            <li>
+                                                <i class="fas fa-star active"></i>
+                                            </li>
+                                            <li>
+                                                <i class="fas fa-star active"></i>
+                                            </li>
+                                            <li>
+                                                <i class="fas fa-star active"></i>
+                                            </li>
+                                            <li>
+                                                <i class="fas fa-star"></i>
+                                            </li>
+                                            <li>
+                                                <h5>- برای کیفیت محصول</h5>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت.</p>
+                                </div>
+                            </li>
+                            <li class="review-item">
+                                <div class="review-author">
+                                    <div class="review-avatar">
+                                        <a href="#">
+                                            <img src="images/avatar/03.jpg" alt="review">
+                                        </a>
+                                    </div>
+                                    <div class="review-meta">
+                                        <h6>
+                                            <a href="#">میرون محمود</a>- <span>اسفند 1399</span>
+                                        </h6>
+                                        <ul>
+                                            <li>
+                                                <i class="fas fa-star active"></i>
+                                            </li>
+                                            <li>
+                                                <i class="fas fa-star active"></i>
+                                            </li>
+                                            <li>
+                                                <i class="fas fa-star active"></i>
+                                            </li>
+                                            <li>
+                                                <i class="fas fa-star active"></i>
+                                            </li>
+                                            <li>
+                                                <i class="fas fa-star active"></i>
+                                            </li>
+                                            <li>
+                                                <h5>- برای سیستم تحویل</h5>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت.</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <form class="ad-review-form">
+                            <div class="star-rating">
+                                <input type="radio" name="rating" id="star-1">
+                                <label for="star-1"></label>
+                                <input type="radio" name="rating" id="star-2">
+                                <label for="star-2"></label>
+                                <input type="radio" name="rating" id="star-3">
+                                <label for="star-3"></label>
+                                <input type="radio" name="rating" id="star-4">
+                                <label for="star-4"></label>
+                                <input type="radio" name="rating" id="star-5">
+                                <label for="star-5"></label>
+                            </div>
+                            <div class="ad-review-form-grid">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="نام">
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control" placeholder="ایمیل">
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control custom-select">
+                                        <option selected="">نقل قول </option>
+                                        <option value="1">سیستم تحویل</option>
+                                        <option value="2">تعداد محصول</option>
+                                        <option value="3">مسئله پرداخت </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" placeholder="توضیح"></textarea>
+                            </div>
+                            <button class="btn btn-inline">
+                                <i class="fas fa-tint"></i>
+                                <span>نظر خود را رها کنید</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+              
+                <div class="ad-details-card">
+                    <div class="ad-details-title">
+                        <h5>اطلاعات منتشر کننده </h5>
+                    </div>
+                    <div class="ad-details-profile">
+                        <div class="author-img">
+                            <a href="#">
+
+
+
+                                @if (Model.UserAvatar == "defaultAvatar.jpg" || Model.UserAvatar == "notFound.jpg")
+                                {
+                                    <img src="~/Gallery/defaultAvatar.jpg">
+                                }
+                                else
+                                {
+                                    <img src="~/Gallery/User/@Model.UserAvatar">
+                                }
+                              
+                                <span class="author-status"></span>
+                            </a>
+                        </div>
+                        <div class="author-intro">
+                            <h4>
+                              @Model.UserFirstName @Model.UserLastName
+                             </h4>
+                            <h5>فروشنده جدید</h5>
+                            <p>@Model.Address </p>
+                        </div>
+                        <ul class="author-widget">
+                            <li>
+                                <a href="tel:@Model.PhoneNumber">
+                                    <i class="fas fa-phone-alt"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="mailto: @Model.Email">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa-brands fa-instagram"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa-brands fa-facebook"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa-brands fa-linkedin"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="author-list">
+                            <li>
+                                <h6>سایت</h6>
+                                <p>@Model.Link</p>
+                            </li>
+                            <li>
+                                <h6>کد</h6>
+                                <p>@Model.Code</p>
+                            </li>
+                            <li>
+                                <h6>دسته‌بندی </h6>
+                                <p>@Model.CategoryName</p>
+                            </li>
+                        </ul>
+                        <div class="author-details">
+                            <h6>@Model.ProvinceName - @Model.CityName</h6>
+                        
+                        </div>
+                    </div>
+                </div>
+                @if (Model.IsTime)
+                {
+                    @await Component.InvokeAsync("BusinessTimeComponent", ViewBag.Id)
+
+                }
+                <div class="ad-details-card">
+                    <div class="ad-details-title">
+                        <h5>موقعیت مکانی </h5>
+                    </div>
+
+                    @{
+                        string map = "https://maps.google.com/maps?q=";
+                        map = map + @Model.Longitude;
+                        map = map + ",";
+                        map = map + @Model.Latitude;
+                        map = map + "&output=embed";
+                    }
+                    <div class="ad-details-location">
+                        <iframe src="@map"></iframe>
+                    </div>
+                </div>
+                <div class="ad-details-card">
+                    <div class="ad-details-title">
+                        <h5>نکات ایمنی</h5>
+                    </div>
+                    <div class="ad-details-safety">
+                        <ul>
+                            <li>
+                                <i class="fas fa-dot-circle"></i>
+                                <p>قبل از خرید مورد را بررسی کنید</p>
+                            </li>
+                            <li>
+                                <i class="fas fa-dot-circle"></i>
+                                <p>فقط پس از جمع آوری کالا پرداخت کنید</p>
+                            </li>
+                            <li>
+                                <i class="fas fa-dot-circle"></i>
+                                <p>مراقب پیشنهادهای غیرواقعی باشید</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="ad-details-card">
+                    <div class="ad-details-title">
+                        <h5>تبلیغات ویژه</h5>
+                    </div>
+                    <div class="ad-details-feature slider-arrow slick-initialized slick-slider">
+                        <i class="fas fa-long-arrow-alt-right dandik slick-arrow" style="display: block;"></i>
+                        <div class="slick-list draggable">
+                            <div class="slick-track" style="opacity: 1; width: 2030px; transform: translate3d(-580px, 0px, 0px);">
+                                <div class="feature-card slick-slide slick-cloned" data-slick-index="-1" aria-hidden="true" tabindex="-1" style="width: 290px;">
+                                    <div class="feature-img">
+                                        <a href="#" tabindex="-1">
+                                            <img src="images/product/08.jpg" alt="feature">
+                                        </a>
+                                    </div>
+                                    <div class="feature-badge">
+                                        <p>ویژه </p>
+                                    </div>
+                                    <div class="feature-bookmark">
+                                        <button type="button" tabindex="-1">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                    </div>
+                                    <div class="feature-content">
+                                        <ol class="breadcrumb">
+                                            <li>
+                                                <span class="feature-cate sale">ویژه </span>
+                                            </li>
+                                            <li class="breadcrumb-item">
+                                                <a href="#" tabindex="-1">گجت </a>
+                                            </li>
+                                            <li class="breadcrumb-item active" aria-current="page">آیفون </li>
+                                        </ol>
+                                        <div class="feature-title">
+                                            <h3>
+                                                <a href="#" tabindex="-1">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است..</a>
+                                            </h3>
+                                        </div>
+                                        <ul class="feature-meta">
+                                            <li>
+                                                <span>
+                                                    115000 تومان <small>/ توافقی</small>
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <i class="fas fa-clock"></i>
+                                                <span>56 دقیقه قبل</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="feature-card slick-slide" data-slick-index="0" aria-hidden="true" tabindex="-1" style="width: 290px;">
+                                    <div class="feature-img">
+                                        <a href="#" tabindex="-1">
+                                            <img src="images/product/10.jpg" alt="feature">
+                                        </a>
+                                    </div>
+                                    <div class="feature-badge">
+                                        <p>ویژه </p>
+                                    </div>
+                                    <div class="feature-bookmark">
+                                        <button type="button" tabindex="-1">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                    </div>
+                                    <div class="feature-content">
+                                        <ol class="breadcrumb">
+                                            <li>
+                                                <span class="feature-cate rent">اجاره </span>
+                                            </li>
+                                            <li class="breadcrumb-item">
+                                                <a href="#" tabindex="-1">اتومبیل</a>
+                                            </li>
+                                            <li class="breadcrumb-item active" aria-current="page">خودرو شخصی </li>
+                                        </ol>
+                                        <div class="feature-title">
+                                            <h3>
+                                                <a href="#" tabindex="-1">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است..</a>
+                                            </h3>
+                                        </div>
+                                        <ul class="feature-meta">
+                                            <li>
+                                                <span>
+                                                    120000 تومان <small>/ ماهانه </small>
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <i class="fas fa-clock"></i>
+                                                <span>56 دقیقه قبل</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="feature-card slick-slide slick-current slick-active" data-slick-index="1" aria-hidden="false" tabindex="0" style="width: 290px;">
+                                    <div class="feature-img">
+                                        <a href="#" tabindex="0">
+                                            <img src="images/product/01.jpg" alt="feature">
+                                        </a>
+                                    </div>
+                                    <div class="feature-badge">
+                                        <p>ویژه </p>
+                                    </div>
+                                    <div class="feature-bookmark">
+                                        <button type="button" tabindex="0">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                    </div>
+                                    <div class="feature-content">
+                                        <ol class="breadcrumb">
+                                            <li>
+                                                <span class="feature-cate booking">رزرو </span>
+                                            </li>
+                                            <li class="breadcrumb-item">
+                                                <a href="#" tabindex="0">ویژگی </a>
+                                            </li>
+                                            <li class="breadcrumb-item active" aria-current="page">خانه </li>
+                                        </ol>
+                                        <div class="feature-title">
+                                            <h3>
+                                                <a href="#" tabindex="0">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است..</a>
+                                            </h3>
+                                        </div>
+                                        <ul class="feature-meta">
+                                            <li>
+                                                <span>
+                                                    80000 تومان <small>/ روزانه</small>
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <i class="fas fa-clock"></i>
+                                                <span>56 دقیقه قبل</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="feature-card slick-slide" data-slick-index="2" aria-hidden="true" tabindex="-1" style="width: 290px;">
+                                    <div class="feature-img">
+                                        <a href="#" tabindex="-1">
+                                            <img src="images/product/08.jpg" alt="feature">
+                                        </a>
+                                    </div>
+                                    <div class="feature-badge">
+                                        <p>ویژه </p>
+                                    </div>
+                                    <div class="feature-bookmark">
+                                        <button type="button" tabindex="-1">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                    </div>
+                                    <div class="feature-content">
+                                        <ol class="breadcrumb">
+                                            <li>
+                                                <span class="feature-cate sale">ویژه </span>
+                                            </li>
+                                            <li class="breadcrumb-item">
+                                                <a href="#" tabindex="-1">گجت </a>
+                                            </li>
+                                            <li class="breadcrumb-item active" aria-current="page">آیفون </li>
+                                        </ol>
+                                        <div class="feature-title">
+                                            <h3>
+                                                <a href="#" tabindex="-1">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است..</a>
+                                            </h3>
+                                        </div>
+                                        <ul class="feature-meta">
+                                            <li>
+                                                <span>
+                                                    115000 تومان <small>/ توافقی</small>
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <i class="fas fa-clock"></i>
+                                                <span>56 دقیقه قبل</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="feature-card slick-slide slick-cloned" data-slick-index="3" aria-hidden="true" tabindex="-1" style="width: 290px;">
+                                    <div class="feature-img">
+                                        <a href="#" tabindex="-1">
+                                            <img src="images/product/10.jpg" alt="feature">
+                                        </a>
+                                    </div>
+                                    <div class="feature-badge">
+                                        <p>ویژه </p>
+                                    </div>
+                                    <div class="feature-bookmark">
+                                        <button type="button" tabindex="-1">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                    </div>
+                                    <div class="feature-content">
+                                        <ol class="breadcrumb">
+                                            <li>
+                                                <span class="feature-cate rent">اجاره </span>
+                                            </li>
+                                            <li class="breadcrumb-item">
+                                                <a href="#" tabindex="-1">اتومبیل</a>
+                                            </li>
+                                            <li class="breadcrumb-item active" aria-current="page">خودرو شخصی </li>
+                                        </ol>
+                                        <div class="feature-title">
+                                            <h3>
+                                                <a href="#" tabindex="-1">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است..</a>
+                                            </h3>
+                                        </div>
+                                        <ul class="feature-meta">
+                                            <li>
+                                                <span>
+                                                    120000 تومان <small>/ ماهانه </small>
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <i class="fas fa-clock"></i>
+                                                <span>56 دقیقه قبل</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="feature-card slick-slide slick-cloned" data-slick-index="4" aria-hidden="true" tabindex="-1" style="width: 290px;">
+                                    <div class="feature-img">
+                                        <a href="#" tabindex="-1">
+                                            <img src="images/product/01.jpg" alt="feature">
+                                        </a>
+                                    </div>
+                                    <div class="feature-badge">
+                                        <p>ویژه </p>
+                                    </div>
+                                    <div class="feature-bookmark">
+                                        <button type="button" tabindex="-1">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                    </div>
+                                    <div class="feature-content">
+                                        <ol class="breadcrumb">
+                                            <li>
+                                                <span class="feature-cate booking">رزرو </span>
+                                            </li>
+                                            <li class="breadcrumb-item">
+                                                <a href="#" tabindex="-1">ویژگی </a>
+                                            </li>
+                                            <li class="breadcrumb-item active" aria-current="page">خانه </li>
+                                        </ol>
+                                        <div class="feature-title">
+                                            <h3>
+                                                <a href="#" tabindex="-1">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است..</a>
+                                            </h3>
+                                        </div>
+                                        <ul class="feature-meta">
+                                            <li>
+                                                <span>
+                                                    80000 تومان <small>/ روزانه</small>
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <i class="fas fa-clock"></i>
+                                                <span>56 دقیقه قبل</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="feature-card slick-slide slick-cloned" data-slick-index="5" aria-hidden="true" tabindex="-1" style="width: 290px;">
+                                    <div class="feature-img">
+                                        <a href="#" tabindex="-1">
+                                            <img src="images/product/08.jpg" alt="feature">
+                                        </a>
+                                    </div>
+                                    <div class="feature-badge">
+                                        <p>ویژه </p>
+                                    </div>
+                                    <div class="feature-bookmark">
+                                        <button type="button" tabindex="-1">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                    </div>
+                                    <div class="feature-content">
+                                        <ol class="breadcrumb">
+                                            <li>
+                                                <span class="feature-cate sale">ویژه </span>
+                                            </li>
+                                            <li class="breadcrumb-item">
+                                                <a href="#" tabindex="-1">گجت </a>
+                                            </li>
+                                            <li class="breadcrumb-item active" aria-current="page">آیفون </li>
+                                        </ol>
+                                        <div class="feature-title">
+                                            <h3>
+                                                <a href="#" tabindex="-1">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است..</a>
+                                            </h3>
+                                        </div>
+                                        <ul class="feature-meta">
+                                            <li>
+                                                <span>
+                                                    115000 تومان <small>/ توافقی</small>
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <i class="fas fa-clock"></i>
+                                                <span>56 دقیقه قبل</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <i class="fas fa-long-arrow-alt-left bamdik slick-arrow" style="display: block;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

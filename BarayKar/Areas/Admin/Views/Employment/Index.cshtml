@@ -1,0 +1,133 @@
+﻿@model Application.Common.Model.PaginatedList<Application.Cqrs.Employment.EmploymentViewModel>
+@{
+    ViewData["Title"] = "مدیریت آگهی‌ها";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@section Script {
+    <script src="~/assets/js/pagination.js"></script>
+    <script src="~/assets/js/alert.js"></script>
+}<div class="container">
+    <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="lh-1-85 breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">پیشخوان</a>
+                </li>
+
+                <li class="breadcrumb-item active"> مدیریت آگهی‌ها </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="card">
+            <div class="card-header ">
+                <h5 class="heading-color"> مدیریت آگهی‌ها</h5>
+
+                <form asp-controller="Employment" asp-area="Admin" asp-action="Index" method="get"
+                      class="row mt-3 shadow-lg p-3 mb-3 bg-white rounded p-3"
+                      style="background-color:#ececec !important">
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                        <a asp-area="Admin" asp-controller="Employment" asp-action="Create"
+                           class="btn btn-sm btn-success text-white">ایجاد آگهی‌‌‌ جدید</a>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                        <input name="keyword" type="search" class="form-control form-control-sm" placeholder="جستجو ..."
+                               aria-controls="DataTables_Table_3">
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                        <button type="submit" class="btn btn-sm btn-info text-white"><i class="bx bx-search"></i></button>
+                        <a asp-controller="Employment" asp-area="Admin" asp-action="Index" class="btn btn-sm btn-warning text-white"><i class="bx bx-refresh"></i></a>
+                    </div>
+                    <input type="hidden" name="CurentPage" />
+                    <input type="hidden" name="Keyword" />
+                </form>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive text-nowrap">
+                    <table class="table">
+                        <thead>
+                            <tr>
+
+                                <th>عنوان</th>
+                                <th>کد سیستم</th>
+                                <th>نام شرکت/مجموعه </th>
+                                <th>وضعیت</th>
+                                <th>وضعیت نمایش</th>
+                                <th>عملیات</th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+
+                            @foreach (var item in Model.List!)
+                            {
+                                <tr id="Item_@item.Id">
+                                    <td>
+                                        @item.Title
+                                    </td>
+                                    <td>
+                                        @item.Code
+                                    </td>
+                                    <td>
+                                        @item.BusinessAccountName
+                                    </td>
+                                    <td>
+                                        @switch (item.status)
+                                        {
+                                            case Application.Common.Enum.Status.Accepted:
+                                                <spna class="badge bg-success">منتشر شده</spna>
+                                                break;
+
+                                            case Application.Common.Enum.Status.Waiting:
+                                                <spna class="badge bg-warning">در انتظار</spna>
+                                                break;
+
+                                            case Application.Common.Enum.Status.Rejected:
+                                                <spna class="badge bg-danger">رد شده</spna>
+                                                break;
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @if (item.IsActive)
+                                        {
+                                            <span class="text-success">نمایش</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-danger">عدم نمایش</span>
+                                        
+                                        }
+                                    </td>
+                                    <td>
+                                       
+                                      
+                                        <a class="btn btn-sm btn-warning text-white p-1" asp-controller="Employment" asp-action="Edit" asp-route-id="@item.Id"><i class="bx bx-edit-alt me-1"></i> </a>
+                                        <a class="btn btn-sm btn-danger text-white p-1" onclick="RemoveModal('پاک کردن کسب و کار‌','آیا کسب و کار‌ حذف شود؟','Employment','Delete','@item.Id')"><i class="bx bx-trash me-1"></i> </a>
+
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    @if (Model.TotalPage > 1)
+                    {
+                        <div id="paginationSection"
+                             data-controller-name="Employment"
+                             data-action-name="Index"
+                             data-keyword="@Model.Keyword"
+                             data-pageSize="@Model.PageSize"
+                             data-current-page="@Model.CurentPage"
+                             data-total-pages="@Model.TotalPage" data-parent="">
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+

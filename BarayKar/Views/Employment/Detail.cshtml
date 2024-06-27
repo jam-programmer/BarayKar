@@ -1,0 +1,139 @@
+﻿@model EmploymentDetailViewModel
+@{
+    ViewData["Title"] = "جزئیات آگهی";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Style{
+    <link rel="stylesheet" href="~/main/css/custom/grid-details.css">
+}
+
+<section class="single-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="single-content">
+                    <h2>@Model.Title</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="index.html">صفحه اصلی</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="rightbar-list.html">لیست نوار چپ</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">جزئیات نوار چپ</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="ad-details-part">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 m-auto">
+        <div class="ad-details-card">
+          <div class="ad-details-breadcrumb">
+            <ol class="breadcrumb">
+              <li>
+                <span class="flat-badge sale">@Model.BusinessAccountName</span>
+              </li>
+              <li class="breadcrumb-item">
+                <a> کد: @Model.Code</a>
+              </li>
+             
+            </ol>
+          </div>
+          <div class="ad-details-heading">
+            <h2>
+              @Model.Title
+            </h2>
+          </div>
+       
+          <div class="ad-details-action">
+                        <div class="ad-details-descrip">
+                            <p>
+                         @Model.Description
+                            </p>
+                        </div>
+                        <div class="ad-details-specific mt-5 mb-5">
+                            <ul>
+                                <li>
+                                    <h6>حقوق:</h6>
+                                    <p>@Model.Salary</p>
+                                </li>
+                                <li>
+                                    <h6>نوع همکاری:</h6>
+                                    <p>@Model.TypeOfCooperation</p>
+                                </li>
+                                <li>
+                                    <h6>سابقه:</h6>
+                                    <p>@Model.WorkExperience</p>
+                                </li>
+                                <li>
+                                    <h6>جنسیت:</h6>
+                                    <p>
+                                        @if (Model.Gender==Gender.Male)
+                                        {
+                                           <span>آقا</span>
+                                        }
+                                        else
+                                        {
+                                            <span>خانم</span>
+                                        }
+
+                                        </p>
+                                </li>
+                                <li>
+                                    <h6>استان-شهر:</h6>
+                                    <p>@Model.ProvinceName - @Model.CityName</p>
+                                </li>
+                                <li>
+                                    <h6>سن:</h6>
+                                    <p>@Model.Age</p>
+                                </li>
+                                <li>
+                                    <h6>ساعت شروع کار:</h6>
+                                    <p>@Model.StartTime</p>
+                                </li>
+                                <li>
+                                    <h6>ساعت پایان کار:</h6>
+                                    <p>@Model.StartTime</p>
+                                </li>
+                                <li>
+                                    <h6>روزهای کاری:</h6>
+                                    <p>@Model.BusinessDays</p>
+                                </li>
+                                <li>
+                                    <h6>تاریخ انتشار:</h6>
+                                    <p>@Model.CreateTime</p>
+                                </li>
+
+
+                            </ul>
+                        </div>
+            <ul>
+              <li>
+                                <a class="btn btn-success text-white w-100" style="height: 48px;padding-top:12px;">
+                                    <i class="fa-solid fa-hand"></i>
+                  <span>ارسال درخواست همکاری </span>
+                </a>
+              </li>
+              <li>
+                <button type="button">
+                  <i class="fas fa-exclamation-triangle"></i>
+                  <span>گزارش </span>
+                </button>
+              </li>
+              <li>
+                <button type="button">
+                  <i class="fas fa-share-alt"></i>
+                  <span>اشتراک </span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

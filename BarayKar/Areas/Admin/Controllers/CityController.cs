@@ -1,0 +1,120 @@
+﻿using Application.Common.Interfaces;
+using Application.Common.Model;
+using Application.Common.Model.CustomModel;
+using Application.Cqrs.City;
+using Application.Cqrs.Province;
+using BarayKar.Areas.Admin.Models;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+
+namespace BarayKar.Areas.Admin.Controllers
+{
+    [Area("Admin")]
+    public class CityController(IMediator mediator) : Controller
+    {
+        private readonly IMediator _mediator = mediator;
+        [HttpGet]
+        public async Task<IActionResult> Index([FromQuery]
+        ChildPagination pagination, CancellationToken cancellation = default)
+        {
+            var pageModel = await _mediator.Send(new GetCitiesQuery
+            { pagination = pagination },
+                cancellation);
+            ViewBag.Parent = pagination.ParentId;
+            return View(pageModel);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Create(Guid ParentId)
+        {
+            if (ParentId == Guid.Empty)
+            {
+                return RedirectToAction("Index","Province");
+            }
+            ViewBag.Parent = ParentId;
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(InsertCityCommand command, CancellationToken cancellation)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _mediator.Send(command, cancellation);
+                if (result.IsSuccess)
+                {
+                    return RedirectToAction(nameof(Index), new {parentId=command.ProvinceId});
+                }
+                if (result.Message != null)
+                {
+                    string error = string.Empty;
+                    foreach (var item in result.Message!)
+                    {
+                        error += item;
+                    }
+                    ViewBag.Alert = error;
+                }
+            }
+            ViewBag.Parent = command.ProvinceId;
+            return View(command);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid Id,Guid ParentId,CancellationToken cancellation = default)
+        {
+            if (Id == Guid.Empty)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            var pageModel = await _mediator.Send(new GetCityQuery
+            {
+                Id = Id
+            }, cancellation);
+            if (pageModel.IsSuccess)
+            {
+
+                return View(pageModel.Data);
+            }
+            return RedirectToAction(nameof(Index), new { parentId = ParentId });
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(UpdateCityCommand command, CancellationToken cancellation = default)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _mediator.Send(command, cancellation);
+                if (result.IsSuccess)
+                {
+                    return RedirectToAction(nameof(Index), new { parentId = command.ProvinceId });
+                }
+                if (result.Message != null)
+                {
+                    string error = string.Empty;
+                    foreach (var item in result.Message!)
+                    {
+                        error += item;
+                    }
+                    ViewBag.Alert = error;
+                }
+
+            }
+
+            return View(command);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete([FromBody] IdInputModel model,
+          CancellationToken cancellation)
+        {
+
+            if (model == null)
+            {
+                return BadRequest();
+            }
+            var requestModel = await _mediator.Send(new DeleteCityCommand()
+            {
+                Id = model.Id
+            }, cancellation);
+
+            return Ok(requestModel);
+        }
+    }
+}

@@ -1,0 +1,56 @@
+﻿@model Application.Cqrs.City.InsertCityCommand
+@{
+    ViewData["Title"] = "ایجاد شهر جدید";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+@section Script {
+    <script src="~/assets/js/upload.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+}
+<div class="container">
+    <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="lh-1-85 breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">پیشخوان</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="City" asp-action="Index" asp-route-parentId="@ViewBag.Parent">مدیریت شهر‌ها‌‌</a>
+                </li>
+                <li class="breadcrumb-item active">ایجاد شهر‌ جدید</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-xl-6 col-lg-6 col-sm-12 offset-xl-3 offset-lg-3 offset-md-3">
+            <div class="card mb-4">
+                <form asp-area="Admin" asp-controller="City" asp-action="Create" >
+                    <h5 class="card-header heading-color">ایجاد شهر جدید</h5>
+                    @if (ViewBag.Alert != null)
+                    {
+                        <div class="mx-3 alert alert-warning">@ViewBag.Alert</div>
+                    }
+                    <div class="card-body demo-vertical-spacing demo-only-element">
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">نام شهر‌  </label>
+                                    <input asp-for="Name" type="text" class="form-control"
+                                           placeholder="نام شهر‌ " aria-describedby="defaultFormControlHelp">
+                                    <span class="text-danger" asp-validation-for="Name"></span>
+                                </div>
+                            </div>
+                            <input type="hidden" asp-for="ProvinceId" value="@ViewBag.Parent"/>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-sm rounded-pill btn-success">ثبت</button>
+                        <a asp-area="Admin" asp-controller="City" asp-action="Index" 
+                        asp-route-parentId="@ViewBag.Parent"
+                        class="btn btn-sm rounded-pill btn-warning text-white">بازگشت</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

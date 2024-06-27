@@ -1,0 +1,115 @@
+﻿@model Application.Cqrs.Category.UpdateCategoryCommand
+@{
+    ViewData["Title"] = "ویرایش دسته‌بندی";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+@section Style {
+
+    <link rel="stylesheet" href="~/assets/vendor/libs/select2/select2.css">
+}
+@section Script {
+    <script>
+        $(document).ready(function () {
+            $('#select2Basic').select2();
+        });
+    </script>
+    <script src="~/assets/js/upload.js"></script>
+    <script src="~/assets/vendor/libs/select2/select2.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+}
+<div class="container">
+    <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="lh-1-85 breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">پیشخوان</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="Category" asp-action="Index">مدیریت دسته‌بندی‌ها</a>
+                </li>
+                <li class="breadcrumb-item active">ویرایش دسته‌بندی </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-xl-6 col-lg-6 col-sm-12 offset-xl-3 offset-lg-3 offset-md-3">
+            <div class="card mb-4">
+                <form asp-area="Admin" asp-controller="Category" asp-action="Edit" enctype="multipart/form-data">
+                    <h5 class="card-header heading-color">ویرایش دسته‌بندی </h5>
+                    @if (ViewBag.Alert != null)
+                    {
+                        <div class="mx-3 alert alert-warning">@ViewBag.Alert</div>
+                    }
+                    <div class="card-body demo-vertical-spacing demo-only-element">
+
+                        <div class="row">
+                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+
+                                <div class="avatar avatar-xl">
+                                    @if (Model.ImagePath == "defaultAvatar.jpg" || Model.ImagePath == "notFound.jpg")
+                                    {
+                                        <img id="imagePath_1" src="~/Gallery/defaultAvatar.jpg" class="rounded-circle">
+                                    }
+                                    else
+                                    {
+                                        <img id="imagePath_1" src="~/Gallery/Category/@Model.ImagePath" class="rounded-circle">
+
+                                    }
+
+                                </div>
+                                <div class="mb-3">
+                                    <label for="formFile" class="form-label">آپلود تصویر</label>
+                                    <input class="form-control" asp-for="ImageFile" onchange="ChangeImage(this,1)" type="file" id="formFile">
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" asp-for="Id" />  <input type="hidden" asp-for="ImagePath" />
+                        <div class="row">
+
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">نام دسته‌بندی  </label>
+                                    <input asp-for="Name" type="text" class="form-control"
+                                           placeholder="نام دسته‌بندی " aria-describedby="defaultFormControlHelp">
+                                    <span class="text-danger" asp-validation-for="Name"></span>
+                                </div>
+                            </div>
+
+
+
+
+
+
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">  دسته‌بندی والد </label>
+                                    <div class="form-control-wrap">
+
+                                        <select id="select2Basic" class="select2 form-select form-select-lg select2-hidden-accessible"
+                                                data-allow-clear="true"
+                                                data-select2-id="select2Basic"
+                                                asp-for="ParentCategoryId" asp-items="@ViewBag.Categories"
+                                                tabindex="-1" aria-hidden="true">
+                                            <option disabled selected>یک گزینه انتخاب کنید.</option>
+                                        </select>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-sm rounded-pill btn-success">ثبت</button>
+                        <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="btn btn-sm rounded-pill btn-warning text-white">بازگشت</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+﻿@model List<ProvinceFilterViewModel>
+
+<div class="col-md-6 col-lg-12">
+    <div class="product-sidebar">
+        <div class="product-sidebar-title">
+            <h6>فیلتر بر اساس شهر و استان</h6>
+        </div>
+        <div class="product-sidebar-content">
+            <ul class="nasted-dropdown">
+
+                @foreach (var item in Model)
+                {
+                    <li>
+                        <div class="nasted-menu">
+                            <p>
+                                <input type="checkbox" onchange="OptionQuery()" class="mt-2" name="province" id="@item.Id" />    <span></span> @item.Name
+                            </p>
+
+                            @if (item.cities.Any())
+                            {
+                                <i class="fas fa-chevron-down"></i>
+                            }
+
+
+                        </div>
+                        @if (item.cities.Any())
+                        {
+                            <ul class="nasted-menu-list">
+
+                                @foreach (var subItem in item.cities)
+                                {
+                                    <li>
+                                        <input type="checkbox" onchange="OptionQuery()" name="city" id="@subItem.Id" class="mt-2" /><span class="mr-2">@subItem.Name</span>
+                                    </li>
+
+                                }
+
+                            </ul>
+                        }
+
+
+                    </li>
+                }
+
+            </ul>
+
+            <button onclick="ClearQuery()" class="product-filter-btn"><i class="fas fa-broom"></i><span>حذف فیلتر</span></button>
+        </div>
+    </div>
+</div>

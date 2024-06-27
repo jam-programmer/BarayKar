@@ -1,0 +1,115 @@
+﻿@using System.Security.Claims
+<header class="header-part">
+    <div class="container">
+        <div class="header-content">
+            <div class="header-left">
+                <ul class="header-widget">
+                    @if (User.Identity!.IsAuthenticated)
+                    {
+                        <li>
+                            <button type="button" class="header-menu">
+                                <i class="fas fa-align-left"></i>
+                            </button>
+                        </li>
+                    }
+
+                   
+                  @await Component.InvokeAsync("LogoComponent")
+                   
+                    <li>
+                        <button type="button" class="header-src">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <form class="header-search w-50">
+                <div class="header-main-search">
+                    <button type="submit" class="header-search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <input type="text" class="form-control" placeholder="چیزی که دوست داری را جستجو کن ...">
+                    <button type="button" class="header-option-btn tooltip">
+                        <i class="fas fa-sliders-h"></i>
+                        <span class="tooltext left">گزینه فیلتر</span>
+                    </button>
+                </div>
+                <div class="header-search-option">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="شهر">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="منطقه">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="دسته بندی">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <input type="number" class="form-control" placeholder="قیمت">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-btn">
+                                <button type="submit" class="btn btn-inline">
+                                    <i class="fas fa-search"></i>
+                                    <span>جستجو کنید</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="header-right">
+                <ul class="header-widget">
+                   
+                    @if (User.Identity!.IsAuthenticated)
+                    {
+                        <li>
+                            <a asp-controller="Dashboard" asp-action="Index" asp-area="User" class="header-user">
+                                <i class="fas fa-user"></i>
+                                <span>@User!.FindFirstValue(ClaimTypes.Name)</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/SignOut" class="header-user">
+                                <i class="fa-solid fa-right-to-bracket"></i>
+                                <span>خروج</span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                    <li>
+                        <a asp-controller="Identity" asp-action="SignIn" class="header-user">
+                            <i class="fas fa-user"></i>
+                            <span>ورود</span>
+                        </a>
+                    </li>
+
+                        <li>
+                            <a asp-controller="Identity" asp-action="SignUp" class="header-user">
+                                <i class="fas fa-user-plus"></i>
+                                <span>ثبت نام</span>
+                            </a>
+                        </li>
+                    }
+
+
+
+
+
+                </ul>
+               
+            </div>
+        </div>
+    </div>
+</header>

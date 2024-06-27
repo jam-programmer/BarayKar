@@ -1,0 +1,69 @@
+﻿@model Application.Cqrs.BusinessTime.UpdateBusinessTimeCommand
+@{
+    ViewData["Title"] = "ویرایش ساعت کاری";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Script {
+    <script src="~/assets/js/upload.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+}
+<div class="container">
+    <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="lh-1-85 breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">پیشخوان</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="BusinessTime" asp-action="Index" asp-route-parentId="@Model.BusinessId">مدیریت ساعات کاری‌‌‌</a>
+                </li>
+                <li class="breadcrumb-item active">ویرایش ساعت کاری</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-xl-6 col-lg-6 col-sm-12 offset-xl-3 offset-lg-3 offset-md-3">
+            <div class="card mb-4">
+                <form asp-area="Admin" asp-controller="BusinessTime" asp-action="Edit">
+                    <h5 class="card-header heading-color">ویرایش ساعت کاری</h5>
+                    @if (ViewBag.Alert != null)
+                    {
+                        <div class="mx-3 alert alert-warning">@ViewBag.Alert</div>
+                    }
+                    <div class="card-body demo-vertical-spacing demo-only-element">
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label"> انتخاب روز هفته  </label>
+                                    <div class="form-control-wrap">
+                                        <select class="form-select "
+                                                asp-items="Html.GetEnumSelectList<Day>()"
+                                                asp-for="Day">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">ساعت کاری  </label>
+                                    <input asp-for="Time" type="text" class="form-control"
+                                           placeholder="از 8 صبح تا 20 شب‌ " aria-describedby="defaultFormControlHelp">
+                                    <span class="text-danger" asp-validation-for="Time"></span>
+                                </div>
+                            </div>
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="BusinessId"  />
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-sm rounded-pill btn-success">ثبت</button>
+                        <a asp-area="Admin" asp-controller="BusinessTime" asp-action="Index"
+                           asp-route-parentId="@Model.BusinessId"
+                           class="btn btn-sm rounded-pill btn-warning text-white">بازگشت</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+ 
+  <head>
+  <partial name="Partial/_HeadTags.cshtml"/>
+    @await RenderSectionAsync("Style", false)
+  </head>
+  <body>
+
+    <partial name="Partial/_Header.cshtml" />
+
+    
+    <partial name="Partial/_Sidebar.cshtml" />
+
+
+
+    <div class="btmbar-part">
+      <div class="container">
+        <ul class="btmbar-widget">
+          <li>
+            <a href="user-form.html">
+              <i class="fas fa-user"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-star"></i>
+              <sup>0</sup>
+            </a>
+          </li>
+          <li>
+            <a class="plus-btn" href="ad-post.html">
+              <i class="fas fa-plus"></i>
+              <span>پست خود را تبلیغ کنید </span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-bell"></i>
+              <sup>0</sup>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-envelope"></i>
+              <sup>0</sup>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    @RenderBody()
+    <partial name="Partial/_Footer.cshtml" />
+
+    <partial name="Partial/_Scripts.cshtml" />
+   @await RenderSectionAsync("Script",false)
+  </body>
+</html>

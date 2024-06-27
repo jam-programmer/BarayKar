@@ -1,0 +1,288 @@
+﻿@model Application.Cqrs.Employment.InsertEmploymentCommand
+@{
+    ViewData["Title"] = "ایجاد آگهی جدید";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Style {
+
+    <link rel="stylesheet" href="~/assets/vendor/libs/select2/select2.css">
+}
+@section Script {
+    <script>
+        function ChangeProvince() {
+            var province = document.getElementById("province"); var city = document.getElementById("city");
+
+            var request = { id: province.value }; var url = '/Admin/Employment/Cities';
+            rest.postAsync(url, null, request, function (isSuccess, response) {
+                if (isSuccess) {
+                    city.innerHTML = "";
+                    var optionDefault = document.createElement("option");
+                    optionDefault.innerHTML = 'یک گزینه انتخاب کنید.';
+                    optionDefault.setAttribute("disabled", "disabled");
+                    optionDefault.setAttribute("selected", "selected");
+                    city.appendChild(optionDefault);
+
+                    response.forEach((cityItem) => {
+                        var option = document.createElement("option");
+                        option.value = cityItem.id;
+                        option.innerHTML = cityItem.title;
+                        city.appendChild(option);
+                    });
+                }
+            });
+        }
+        $(document).ready(function () {
+            $('.select2').select2(); $('.select2').select2(); $('.select2').select2(); $('.select2').select2();
+        });
+
+
+       
+    </script>
+    <script src="~/assets/js/upload.js"></script>
+    <script src="~/assets/vendor/libs/select2/select2.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+}
+<div class="container">
+    <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="lh-1-85 breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">پیشخوان</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="Employment" asp-action="Index">مدیریت آگهی ها</a>
+                </li>
+                <li class="breadcrumb-item active">ایجاد آگهی جدید</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xl-12 col-lg-12 col-sm-12 ">
+            <div class="card mb-4">
+                <form asp-area="Admin" asp-controller="Employment" asp-action="Create">
+                    <h5 class="card-header heading-color">ایجاد آگهی جدید</h5>
+                    @if (ViewBag.Alert != null)
+                    {
+                        <div class="mx-3 alert alert-warning">@ViewBag.Alert</div>
+                    }
+                    <div class="card-body demo-vertical-spacing demo-only-element">
+
+
+                        <div class="row">
+
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div>
+                                    <label class="form-label"> عنوان</label>
+                                    <input asp-for="Title" type="text" class="form-control"
+                                           placeholder=" عنوان‌ " aria-describedby="defaultFormControlHelp">
+                                    <span class="text-danger" asp-validation-for="Title"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div>
+                                    <label class="form-label">  سن </label>
+                                    <input asp-for="Age" type="text" class="form-control"
+                                           placeholder="سن " aria-describedby="defaultFormControlHelp">
+
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label"> حقوق پیشنهادی  </label>
+                                    <div class="form-control-wrap">
+                                        <select class="form-select "
+                                                asp-for="Salary">
+
+                                            <option selected disabled> یک گزینه انتخاب کنید</option>
+                                            <option value="8میلیون تا 10 میلیون">8میلیون تا 10 میلیون</option>
+                                            <option value="12میلیون تا 15 میلیون">12میلیون تا 15 میلیون</option>
+                                            <option value="15میلیون تا 20 میلیون">15میلیون تا 20 میلیون</option>
+                                            <option value="20میلیون تا 25 میلیون">20میلیون تا 25 میلیون</option>
+                                            <option value="25میلیون تا 30 میلیون">25میلیون تا 30 میلیون</option>
+                                            <option value="30میلیون تا 35 میلیون">30میلیون تا 35 میلیون</option>
+                                            <option value="35میلیون تا 40 میلیون">35میلیون تا 40 میلیون</option>
+                                            <option value="40میلیون تا 45 میلیون">40میلیون تا 45 میلیون</option>
+                                            <option value="45میلیون تا 50 میلیون">45میلیون تا 50 میلیون</option>
+                                            <option value="توافقی">توافقی </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div>
+                                    <label class="form-label">  ساعات پایان کار </label>
+                                    <input asp-for="EndTime" type="text" class="form-control"
+                                           placeholder="ساعات پایان کار ">
+
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div>
+                                    <label class="form-label">  سابقه کاری </label>
+                                    <input asp-for="WorkExperience" type="text" class="form-control"
+                                           placeholder="سابقه کاری ">
+
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div>
+                                    <label class="form-label">  ساعت شروع کار </label>
+                                    <input asp-for="StartTime" type="text" class="form-control"
+                                           placeholder=" ساعت شروع کار ">
+
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div>
+                                    <label class="form-label"> روزهای کاری </label>
+                                    <input asp-for="BusinessDays" type="text" class="form-control"
+                                           placeholder="  روزهای کاری ">
+
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label"> نوع همکاری  </label>
+                                    <div class="form-control-wrap">
+                                        <select class="form-select "
+                                                asp-for="TypeOfCooperation">
+
+                                            <option selected disabled> یک گزینه انتخاب کنید</option>
+                                            <option value="حضوری">حضوری</option>
+                                            <option value="دورکاری">دورکاری</option>
+                                            <option value="ترکیبی(حضوری و دورکاری)">ترکیبی(حضوری و دورکاری)</option>
+                                            <option value="پروژه‌ای">پروژه‌ای</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label"> نام مجموعه  </label>
+                                    <div class="form-control-wrap">
+                                       
+                                        <select class="select2 form-select  select2-hidden-accessible"
+                                                data-allow-clear="true"
+                                                data-select2-id="select2Basic"
+                                                asp-for="BusinessId" asp-items="@ViewBag.Businesses"
+                                                tabindex="-1" aria-hidden="true">
+                                            <option disabled selected>یک گزینه انتخاب کنید.</option>
+                                        </select>
+                                    </div>  <span class="text-danger" asp-validation-for="BusinessId"></span>
+                                </div>
+                            </div>
+
+
+
+
+
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">  استان  </label>
+                                    <div class="form-control-wrap">
+                                        <select id="province" class="select2 form-select form-select-lg select2-hidden-accessible"
+                                                data-allow-clear="true"
+                                                data-select2-id="select2Basic"
+                                                onchange="ChangeProvince()"
+                                                asp-for="ProvinceId" asp-items="@ViewBag.Province"
+                                                tabindex="-1" aria-hidden="true">
+                                            <option disabled selected>یک گزینه انتخاب کنید.</option>
+                                        </select>
+                                    </div>
+                                    <span class="text-danger" asp-validation-for="ProvinceId"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">  شهر  </label>
+                                    <div class="form-control-wrap">
+                                        <select id="city" class="select2 form-select form-select-lg select2-hidden-accessible"
+                                                data-allow-clear="true"
+                                                data-select2-id="select2Basic"
+                                                asp-for="CityId" 
+                                                tabindex="-1" aria-hidden="true">
+                                            <option disabled selected>یک گزینه انتخاب کنید.</option>
+                                        </select>
+                                    </div>
+                                    <span class="text-danger" asp-validation-for="CityId"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">  منتشر‌کننده  </label>
+                                    <div class="form-control-wrap">
+                                        <select id="users" class="select2 form-select form-select-lg select2-hidden-accessible"
+                                                data-allow-clear="true"
+                                                data-select2-id="select2Basic"
+                                                asp-for="UserId" asp-items="@ViewBag.Users"
+                                                tabindex="-1" aria-hidden="true">
+                                            <option disabled selected>یک گزینه انتخاب کنید.</option>
+                                        </select>
+                                    </div>
+                                    <span class="text-danger" asp-validation-for="UserId"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label"> جنسیت  </label>
+                                    <div class="form-control-wrap">
+                                        <select class="form-select "
+                                                asp-items="Html.GetEnumSelectList<Gender>()"
+                                                asp-for="Gender">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label"> تغییر وضعیت  </label>
+                                    <div class="form-control-wrap">
+                                        <select class="form-select "
+                                                asp-items="Html.GetEnumSelectList<Status>()"
+                                                asp-for="status">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">توضیحات</label>
+                                    <textarea asp-for="Description" type="text" class="form-control" rows="7"
+                                              placeholder=" توضیحات">
+                                          </textarea>
+                                    <span class="text-danger" asp-validation-for="Description"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                <div class="mt-3">
+
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" asp-for="IsActive">
+                                        <label class="form-check-label" for="flexSwitchCheckDefault">  نمایش/ عدم نمایش</label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+
+
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-sm rounded-pill btn-success">ثبت</button>
+                        <a asp-area="Admin" asp-controller="Employment" asp-action="Index" class="btn btn-sm rounded-pill btn-warning text-white">بازگشت</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

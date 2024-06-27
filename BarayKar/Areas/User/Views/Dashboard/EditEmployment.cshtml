@@ -1,0 +1,254 @@
+﻿@model UpdateEmploymentRecord
+@{
+    ViewData["Title"] = "ویرایش آگهی";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style {
+    <link rel="stylesheet" href="~/assets/vendor/libs/select2/select2.css">
+    <link rel="stylesheet" href="~/main/css/custom/ad-post.css">
+    <link rel="stylesheet" href="~/main/css/custom/profile.css">
+
+    <style>
+
+        .select2-selection__rendered {
+            background-color: #eceff1;
+            border-radius: 15px;
+            padding: 10px;
+        }
+
+        .select2-dropdown {
+            background-color: #eceff1;
+            border-radius: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 3px 3px 9px 9px;
+            margin-top: 12px;
+        }
+
+        .select2-search__field {
+            border: none;
+        }
+    </style>
+}
+@section Script {
+    <script src="~/assets/vendor/libs/select2/select2.js"></script>
+
+    <script src="~/js/site.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/rest.js"></script>
+
+
+    <script>
+
+
+        function ChangeProvince() {
+            var province = document.getElementById("province"); var city = document.getElementById("city");
+
+            var request = { id: province.value }; var url = '/User/Dashboard/Cities';
+            rest.postAsync(url, null, request, function (isSuccess, response) {
+                if (isSuccess) {
+                    city.innerHTML = "";
+                    var optionDefault = document.createElement("option");
+                    optionDefault.innerHTML = 'یک گزینه انتخاب کنید.';
+                    optionDefault.setAttribute("disabled", "disabled");
+                    optionDefault.setAttribute("selected", "selected");
+                    city.appendChild(optionDefault);
+
+                    response.forEach((cityItem) => {
+                        var option = document.createElement("option");
+                        option.value = cityItem.id;
+                        option.innerHTML = cityItem.title;
+                        city.appendChild(option);
+                    });
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $('.select2').select2();
+        });
+        $(document).ready(function () {
+            $('.select2').select2();
+        });
+        $(document).ready(function () {
+            $('.select2').select2();
+        });
+
+    </script>
+}
+
+
+<section class="single-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="single-content">
+                    <h2>پروفایل</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="index.html">صفحه اصلی</a>
+                        </li>
+                        <li class="breadcrumb-item" aria-current="page">کسب و کارهای من</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="dash-header-part">
+    <div class="container">
+        <div class="row">
+
+            @await Component.InvokeAsync("UserInformationComponent", Guid.Parse(User.FindFirstValue("Id")!))
+
+            @await Component.InvokeAsync("UserStatisticalInformationComponent", Guid.Parse(User.FindFirstValue("Id")!))
+
+        </div>
+        @await Component.InvokeAsync("UserDashboardMenuComponent")
+
+    </div>
+</section>
+<section>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-12 mb-5 mt-5">
+
+                <form asp-area="User" asp-controller="Dashboard" asp-action="EditEmployment" method="post">
+                    <div class="adpost-card">
+                        <div class="adpost-title">
+                            <h3> ایجاد آگهی جدید </h3>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">عنوان</label>
+                                    <input asp-for="Title" type="text" class="form-control">
+                                </div>
+                                <span class="text-danger" asp-validation-for="Title"></span>
+                            </div>
+                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">سن</label>
+                                    <input asp-for="Age" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">ساعت شروع کار</label>
+                                    <input asp-for="StartTime" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">ساعت پایان کار </label>
+                                    <input asp-for="EndTime" type="text" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">روزهای کاری </label>
+                                    <input asp-for="BusinessDays" type="text" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">  سابقه کاری </label>
+                                    <input asp-for="WorkExperience" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">حقوق پیشنهادی </label>
+                                    <select asp-for="Salary" class="form-control custom-select">
+                                        <option selected disabled> یک گزینه انتخاب کنید</option>
+                                        <option value="8میلیون تا 10 میلیون">8میلیون تا 10 میلیون</option>
+                                        <option value="12میلیون تا 15 میلیون">12میلیون تا 15 میلیون</option>
+                                        <option value="15میلیون تا 20 میلیون">15میلیون تا 20 میلیون</option>
+                                        <option value="20میلیون تا 25 میلیون">20میلیون تا 25 میلیون</option>
+                                        <option value="25میلیون تا 30 میلیون">25میلیون تا 30 میلیون</option>
+                                        <option value="30میلیون تا 35 میلیون">30میلیون تا 35 میلیون</option>
+                                        <option value="35میلیون تا 40 میلیون">35میلیون تا 40 میلیون</option>
+                                        <option value="40میلیون تا 45 میلیون">40میلیون تا 45 میلیون</option>
+                                        <option value="45میلیون تا 50 میلیون">45میلیون تا 50 میلیون</option>
+                                        <option value="توافقی">توافقی </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">نوع همکاری </label>
+                                    <select asp-for="TypeOfCooperation" class="form-control custom-select">
+
+                                        <option selected disabled> یک گزینه انتخاب کنید</option>
+                                        <option value="حضوری">حضوری</option>
+                                        <option value="دورکاری">دورکاری</option>
+                                        <option value="ترکیبی(حضوری و دورکاری)">ترکیبی(حضوری و دورکاری)</option>
+                                        <option value="پروژه‌ای">پروژه‌ای</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">جنسیت </label>
+                                    <select asp-for="Gender"
+                                            asp-items="Html.GetEnumSelectList<Gender>()"
+                                            asp-for="Gender"
+                                            class="form-control custom-select">
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">توضیحات</label>
+                                    <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                                </div>          <span class="text-danger" asp-validation-for="Description"></span>
+                            </div>
+
+
+
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div class="form-group ">
+                                    <label>کسب و کار</label>
+                                    <select asp-for="BusinessId" id="category" asp-items="@ViewBag.Businesses" class="select2">
+                                        <option selected disabled>انتخاب کسب و کار</option>
+
+                                    </select>
+                                </div>          <span class="text-danger" asp-validation-for="BusinessId"></span>
+                            </div>
+
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div class="form-group ">
+                                    <label>استان</label>
+                                    <select asp-for="ProvinceId" id="province" onchange="ChangeProvince()" asp-items="@ViewBag.Province" class="form-control select2">
+                                        <option selected disabled>انتخاب استان</option>
+
+                                    </select>
+                                </div>          <span class="text-danger" asp-validation-for="ProvinceId"></span>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div class="form-group ">
+                                    <label>شهر</label>
+                                    <select asp-for="CityId" id="city"  asp-items="@ViewBag.City" class="form-control select2">
+                                        <option selected disabled>انتخاب شهر</option>
+
+                                    </select>
+                                </div>          <span class="text-danger" asp-validation-for="CityId"></span>
+                            </div>
+
+
+
+                        </div>
+                        <input type="hidden" asp-for="UserId" />
+                        <input type="hidden" asp-for="Id" />
+
+                        <button type="submit" class="btn btn-sm btn-primary text-white mb-5">ثبت</button>
+                    </div>
+                </form>
+            </div>
+</section>

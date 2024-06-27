@@ -1,0 +1,34 @@
+﻿@model List<BusinessFilterViewModel>
+
+
+<div class="col-md-6 col-lg-12">
+    <div class="product-sidebar">
+        <div class="product-sidebar-title">
+            <h6>فیلتر بر اساس کسب و کار </h6>
+        </div>
+        <div class="product-sidebar-content">
+            <ul class="nasted-dropdown">
+
+                @foreach (var item in Model)
+                {
+                    <li>
+                        <div class="nasted-menu">
+                            <p>
+                                <input type="checkbox" onchange="OptionQuery()" 
+                                    name="business" Id="@item.Id" class="mt-2 " />    <span></span> @item.AccountName
+                            </p>
+
+                         
+
+
+                        </div>
+                       
+
+                    </li>
+                }
+
+            </ul>
+            <button onclick="ClearQuery()" class="product-filter-btn"><i class="fas fa-broom"></i><span>حذف فیلتر</span></button>
+        </div>
+    </div>
+</div>

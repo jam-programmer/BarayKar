@@ -1,0 +1,46 @@
+﻿@model List<ProvinceInfoViewModel>
+
+
+
+<section class="section city-part">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-center-heading">
+                    <h2>
+                       در هر استانی که هستید <span>استخدام شوید </span>
+                    </h2>
+                    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. .</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            @foreach (var item in Model)
+            {
+                string path = string.Empty;
+
+                if (item.Image == "defaultAvatar.jpg" || item.Image == "notFound.jpg")
+                {
+                    path = "../Gallery/defaultAvatar.jpg";
+                }
+                else
+                {
+                    path = $"../Gallery/Province/{item.Image}";
+                }
+
+                <div class="col-sm-6 col-md-6 col-lg-4">
+                    <div class="city-card" style="background:url(@path) no-repeat center; background-size: cover;">
+                        <h5>
+                            <a href="/Employment/AllEmployment?province=@item.Id">@item.Name</a>
+                        </h5>
+                        <p> آگهی‌ استخدام(@item.AdsCount) </p>
+                    </div>
+                </div>
+            }
+          
+            
+        </div>
+       
+    </div>
+</section>

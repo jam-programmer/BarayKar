@@ -1,0 +1,19 @@
+﻿@model HeaderViewModel
+
+
+<section class="banner-part">
+    <div class="container">
+        <div class="banner-content">
+            <h1>@Model.MainText</h1>
+            <p>@Model.MainSubText</p>
+            <a asp-controller="Business" asp-action="AllBusiness" class="btn btn-outline">
+                <i class="fas fa-eye"></i>
+                <span>نمایش تمام کسب و کار ها</span>
+            </a>
+            <a asp-controller="Employment" asp-action="AllEmployment" class="btn btn-outline">
+                <i class="fas fa-eye"></i>
+                <span>نمایش تمام آگهی‌های استخدام</span>
+            </a>
+        </div>
+    </div>
+</section>

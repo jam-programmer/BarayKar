@@ -1,0 +1,185 @@
+﻿@model EmploymentsViewModel
+@{
+    ViewData["Title"] = "آگهی‌های استخدام";
+}
+
+@section Style {
+    <link rel="stylesheet" href="~/main/css/custom/leftbar-list.css">
+
+}
+
+@section Script {
+    <script src="~/js/lib-pagination.js"></script>
+    <script src="~/js/lib-pagination.min.js"></script>
+    <script src="~/js/pagination.js"></script>
+    <script src="~/js/exploreQuery.js"></script>
+
+}
+<section class="single-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="single-content">
+                    <h2>لیست آگهی‌های استخدام </h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">صفحه اصلی</a></li>
+                        <li class="breadcrumb-item text-white" aria-current="page">آگهی‌های استخدام</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="ad-list-part">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="product-filter">
+                    <div class="product-page-number">
+                        <p>نمایش 1-0 از 130 نتیجه</p>
+                    </div>
+
+                    <ul class="product-card-type">
+                        <li class="grid-verti active">
+                            <i class="fas fa-grip-vertical"></i>
+                        </li>
+                        <li class="grid-hori">
+                            <i class="fas fa-grip-horizontal"></i>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row content-reverse">
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-md-6 col-lg-12">
+                        <div class="product-sidebar">
+
+                            <div class="product-sidebar-title">
+                                <h6>فیلتر بر اساس عنوان </h6>
+                            </div>
+                            <div class="product-sidebar-content">
+                                <div class="product-sidebar-search">
+                                    <input id="search" type="text" placeholder="جستجو">
+                                </div>
+                            </div>
+                            <button type="button" onclick="SearchQuery()" class="product-filter-btn"><i class="fas fa-search"></i><span>جستجو </span></button>
+                        </div>
+                    </div>
+
+                    @await Component.InvokeAsync("FilterBusinessComponent")
+                    @await Component.InvokeAsync("FilterProvinceComponent")
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="row">
+                    @if (Model.Employments != null)
+                    {
+                        @foreach (var item in Model.Employments!)
+                        {
+                            string path = "../Gallery/";
+                            if (item.Image == "defaultAvatar.jpg" || item.Image == "notFound.jpg")
+                            {
+                                path += item.Image;
+                            }
+                            else
+                            {
+                                path += "Business/" + item.Image;
+                            }
+                            <div class="col-sm-6 col-md-4 col-lg-4 card-grid">
+                                <div class="product-card">
+                                    <div class="product-head">
+                                        <div class="product-img"
+                                             style="background:url(@path) no-repeat center; background-size:cover;">
+
+                                            <span class="flat-badge booking">کد: @item.Code </span>
+                                            <ul class="product-meta">
+                                                <li>
+                                                    <i class="fas fa-eye"></i>
+                                                    <p>264</p>
+                                                </li>
+                                                <li>
+                                                    <i class="fas fa-mouse"></i>
+                                                    <p>134</p>
+                                                </li>
+                                                <li>
+                                                    <i class="fas fa-star"></i>
+                                                    <p>4.5/7</p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <div class="product-tag">
+                                            <i class="fas fa-tags"></i>
+                                            <ol class="breadcrumb">
+                                                <li class="breadcrumb-item">
+                                                    <a>@item.BusinessAccountName </a>
+                                                </li>
+                                            </ol>
+                                        </div>
+                                        <div class="product-title">
+                                            <h5>
+                                                <a asp-controller="Employment" asp-action="Detail"
+                                                   asp-route-Id="@item.Id">@item.Title</a>
+                                            </h5>
+                                            <ul class="product-location">
+                                                <li>
+                                                    <i class="fas fa-map-marker-alt"></i>
+                                                    <p>
+                                                        @item.ProvinceName - @item.CityName
+                                                    </p>
+                                                </li>
+                                                <li>
+                                                    <i class="fas fa-money-bill"></i>
+
+
+                                                    <p>
+                                                        @item.Salary
+                                                    </p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="product-details">
+                                            <div class="product-price">
+                                                <a asp-controller="Employment" asp-action="Detail"
+                                                   asp-route-Id="@item.Id" class="text-primary">مشاهده</a>
+                                            </div>
+                                            <ul class="product-widget">
+                                                <li>
+                                                    <button class="tooltip">
+                                                        <i class="far fa-heart"></i>
+                                                        <span class="tooltext top">نشانک </span>
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        @if (Model.Total > 1)
+                        {
+                            <div id="paginationSection"
+                                 data-keyword="@Model.Filter!.search"
+                                 data-pageSize="18"
+                                 data-current-page="@Model.Filter.page"
+                                 data-total-pages="@Model.Total"
+                                 data-parent="">
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

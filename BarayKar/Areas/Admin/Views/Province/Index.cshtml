@@ -1,0 +1,113 @@
+﻿@model Application.Common.Model.PaginatedList<Application.Cqrs.Province.ProvinceViewModel>
+
+@{
+    ViewData["Title"] = "مدیریت استان و شهرها";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Script {
+    <script src="~/assets/js/pagination.js"></script>
+    <script src="~/assets/js/alert.js"></script>
+}<div class="container">
+    <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="lh-1-85 breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">پیشخوان</a>
+                </li>
+
+                <li class="breadcrumb-item active"> مدیریت استان و شهرها </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="card">
+            <div class="card-header ">
+                <h5 class="heading-color"> مدیریت استان و شهرها</h5>
+
+                <form asp-controller="Province" asp-area="Admin" asp-action="Index" method="get"
+                      class="row mt-3 shadow-lg p-3 mb-3 bg-white rounded p-3"
+                      style="background-color:#ececec !important">
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                        <a asp-area="Admin" asp-controller="Province" asp-action="Create"
+                           class="btn btn-sm btn-success text-white">ایجاد ‌استان‌ جدید</a>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                        <input name="keyword" type="search" class="form-control form-control-sm" placeholder="جستجو ..."
+                               aria-controls="DataTables_Table_3">
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                        <button type="submit" class="btn btn-sm btn-info text-white"><i class="bx bx-search"></i></button>
+                        <a asp-controller="Province" asp-area="Admin" asp-action="Index" class="btn btn-sm btn-warning text-white"><i class="bx bx-refresh"></i></a>
+                    </div>
+                    <input type="hidden" name="CurentPage" />
+                    <input type="hidden" name="Keyword" />
+                </form>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive text-nowrap">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>تصویر</th>
+                                <th>نام</th>
+
+                              
+                                <th>عملیات</th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+
+                            @foreach (var item in Model.List!)
+                            {
+                                <tr id="Item_@item.Id">
+                                    <td>
+                                        <div class="avatar avatar-md">
+                                            @if (item.Image == "defaultAvatar.jpg" || item.Image == "notFound.jpg")
+                                            {
+                                                <img src="~/Gallery/defaultAvatar.jpg" class="rounded">
+                                            }
+                                            else
+                                            {
+                                                <img src="~/Gallery/Province/@item.Image" class="rounded">
+                                            }
+
+                                        </div>
+                                    </td>
+
+
+                                    <td>
+                                        @item.Name
+                                    </td>
+
+                                  
+                                    <td>
+                                        <a class="btn btn-sm btn-primary text-white p-1" asp-controller="City" asp-action="Index" asp-route-parentId="@item.Id">‌<i class="fa-solid fa-city"></i></a>
+                                        <a class="btn btn-sm btn-warning text-white p-1" asp-controller="Province" asp-action="Edit" asp-route-id="@item.Id"><i class="bx bx-edit-alt me-1"></i> </a>
+                                        <a onclick="RemoveModal('پاک کردن ‌استان‌','آیا استان حذف شود؟','Province','Delete','@item.Id')" class="btn btn-sm btn-danger text-white p-1"><i class="bx bx-trash me-1"></i> </a>
+
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    @if (Model.TotalPage > 1)
+                    {
+                        <div id="paginationSection"
+                             data-controller-name="Province"
+                             data-action-name="Index"
+                             data-keyword="@Model.Keyword"
+                             data-pageSize="@Model.PageSize"
+                             data-current-page="@Model.CurentPage"
+                             data-total-pages="@Model.TotalPage" data-parent="">
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

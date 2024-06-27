@@ -1,0 +1,684 @@
+﻿@model MyResumeRecord
+@{
+    ViewData["Title"] = "رزومه";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section Style {
+
+    <style>
+        .switch {
+            margin-top: 10px;
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+            /* Hide default HTML checkbox */
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        /* The slider */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }
+    </style>
+
+
+    <link rel="stylesheet" href="~/assets/vendor/libs/select2/select2.css">
+    <link rel="stylesheet" href="~/main/css/custom/ad-post.css">
+    <link rel="stylesheet" href="~/main/css/custom/profile.css">
+    <link rel="stylesheet" href="~/map/leaflet.css" />
+    <style>
+        .select2-selection__choice{
+            padding: 2px 15px;
+            background-color: #08bf73;
+            color: white;
+            margin:5px;
+        }
+
+       
+        .select2-selection__rendered {
+            background-color: #eceff1;
+            border-radius: 15px;
+            padding: 10px;
+        }
+
+        .select2-dropdown {
+            background-color: #eceff1;
+            border-radius: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 3px 3px 9px 9px;
+            margin-top: 12px;
+        }
+
+        .select2-search__field {
+            border: none;
+        }
+    </style>
+}
+@section Script {
+    <script src="~/assets/vendor/libs/select2/select2.js"></script>
+
+    <script src="~/assets/js/upload.js"></script>
+    <script src="~/js/site.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/rest.js"></script>
+    <script>
+        function AddCompany() {
+            var Name = document.getElementById("CompanyName").value;
+            var From = document.getElementById("CompanyFrom").value;
+            var To = document.getElementById("CompanyTo").value;
+            var Status = document.getElementById("CompanyStatus").checked;
+            var Description = document.getElementById("CompanyDescription").value;
+            var itemId = RandomId();
+
+            var Body = document.getElementById("CompanyBody");
+            var tr = document.createElement("tr");
+            var tdName = document.createElement("td");
+            var tdFrom = document.createElement("td");
+            var tdTo = document.createElement("td");
+            var tdDescription = document.createElement("td");
+
+            tr.id = "tr_" + itemId;
+            tdName.innerText = Name;
+            tdFrom.innerText = From;
+            tdTo.innerText = Status ? 'مشغول به فعالیت' : To;
+            tdDescription.innerHTML = '<i class="fa-solid fa-envelope text-primary mx-3"></i><i onclick="RemoveCompany(\'' + itemId + '\')" class="mx-3 fa-solid fa-trash text-danger"></i>';
+            tr.appendChild(tdName);
+            tr.appendChild(tdFrom);
+            tr.appendChild(tdTo);
+            tr.appendChild(tdDescription);
+            Body.appendChild(tr);
+
+            var json = document.getElementById("Experiences").value;
+            if (!json) {
+                var obj = [];
+                json = JSON.stringify(obj);
+            }
+            var data = JSON.parse(json);
+            var newObj = {
+                Id: itemId,
+                Title: Name,
+                Description: Description,
+                FromDate: From,
+                ToDate : To,
+                IsActive: Status
+            }
+            data.push(newObj);
+            var updatedJson = JSON.stringify(data);
+            document.getElementById("Experiences").value = updatedJson;
+            console.log(updatedJson);
+            document.getElementById("CompanyName").value = "";
+            document.getElementById("CompanyFrom").value = "";
+            document.getElementById("CompanyTo").value = "";
+            document.getElementById("CompanyStatus").checked = "";
+            document.getElementById("CompanyDescription").value = "";
+        }
+        function RemoveCompany(id) {
+
+            var json = document.getElementById("Experiences").value;
+
+            var data = JSON.parse(json);
+            var updatedJson = data.filter(item => item.Id !== id);
+
+            document.getElementById("Experiences").value = JSON.stringify(updatedJson);
+
+            var trItem = document.getElementById("tr_" + id);
+            if (trItem) {
+                trItem.parentNode.removeChild(trItem);
+            }
+        }
+
+
+        function AddAcademy() {
+            var Name = document.getElementById("AcademyName").value;
+            var From = document.getElementById("AcademyFrom").value;
+            var To = document.getElementById("AcademyTo").value;
+            var Status = document.getElementById("AcademyStatus").checked;
+            var Description = document.getElementById("AcademyDescription").value;
+            var itemId = RandomId();
+
+            var Body = document.getElementById("AcademyBody");
+            var tr = document.createElement("tr");
+            var tdName = document.createElement("td");
+            var tdFrom = document.createElement("td");
+            var tdTo = document.createElement("td");
+            var tdDescription = document.createElement("td");
+
+            tr.id = "tr_" + itemId;
+            tdName.innerText = Name;
+            tdFrom.innerText = From;
+            tdTo.innerText = Status ? 'مشغول به یادگیری' : To;
+            tdDescription.innerHTML = '<i class="fa-solid fa-envelope text-primary mx-3"></i><i onclick="RemoveAcademy(\'' + itemId + '\')" class="mx-3 fa-solid fa-trash text-danger"></i>';
+            tr.appendChild(tdName);
+            tr.appendChild(tdFrom);
+            tr.appendChild(tdTo);
+            tr.appendChild(tdDescription);
+            Body.appendChild(tr);
+
+            var json = document.getElementById("Educationals").value;
+            if (!json) {
+                var obj = [];
+                json = JSON.stringify(obj);
+            }
+            var data = JSON.parse(json);
+            var newObj = {
+                Id: itemId,
+                Title: Name,
+                Description: Description,
+                FromDate: From,
+                ToDate: To,
+                IsActive: Status
+            }
+            data.push(newObj);
+            var updatedJson = JSON.stringify(data);
+            document.getElementById("Educationals").value = updatedJson;
+            console.log(updatedJson);
+            document.getElementById("AcademyName").value = "";
+            document.getElementById("AcademyFrom").value = "";
+            document.getElementById("AcademyTo").value = "";
+            document.getElementById("AcademyStatus").checked = "";
+            document.getElementById("AcademyDescription").value = "";
+        }
+        function RemoveAcademy(id) {
+
+            var json = document.getElementById("Educationals").value;
+
+            var data = JSON.parse(json);
+            var updatedJson = data.filter(item => item.Id !== id);
+
+            document.getElementById("Educationals").value = JSON.stringify(updatedJson);
+
+            var trItem = document.getElementById("tr_" + id);
+            if (trItem) {
+                trItem.parentNode.removeChild(trItem);
+            }
+        }
+
+
+
+        function ChangeFromCompany(){
+            var checkBox = document.getElementById("CompanyStatus");
+            if (checkBox.checked)
+            {
+                document.getElementById("CompanyTo").disabled = "disabled";
+            } else {
+                document.getElementById("CompanyTo").disabled = "";
+            }
+        }
+
+
+        function ChangeFromAcademy() {
+            var checkBox = document.getElementById("AcademyStatus");
+            if (checkBox.checked) {
+                document.getElementById("AcademyTo").disabled = "disabled";
+            } else {
+                document.getElementById("AcademyTo").disabled = "";
+            }
+        }
+ 
+      
+        $(".js-example-tokenizer").select2({
+            tags: true,
+            tokenSeparators: [',', ' ']
+        });
+
+
+        // $('#tags').select2({
+        //     tags: true,
+        //     tokenSeparators: [',', ' '],
+        
+        // }).on('select2:unselect', function (e) {
+        //     var removedTag = e.params.data.text;
+        //     $('#tags option').each(function () {
+        //         if ($(this).text() === removedTag) {
+        //             $(this).remove();
+        //         }
+        //     });
+
+
+
+        //     if (!$('#tags').val()) {
+        //         var dropdown = document.getElementById("tags");
+        //         while (dropdown.options.length > 0) {
+        //             dropdown.remove(0);
+        //         }
+        //     }
+        // });
+
+
+        // $('#tags').select2({
+        //     tags: true,
+        //     tokenSeparators: [',', ' '],
+        // }).on('select2:select', function (e) {
+        //     var tagId = e.params.data.id;
+        //     if ($('#tags').val().length > 2) {
+        //         $('#tags').find('option[value="' + tagId + '"]').prop('selected', false);
+        //         $('#tags').trigger('change');
+        //         alert('You can only select up to 2 tags.');
+        //     }
+        // }).on('select2:unselect', function (e) {
+        //     var removedTag = e.params.data.text;
+        //     alert('Tag "' + removedTag + '" has been removed.');
+        // });
+
+    </script>
+}
+
+<section class="single-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="single-content">
+                    <h2>پروفایل</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="index.html">صفحه اصلی</a>
+                        </li>
+                        <li class="breadcrumb-item" aria-current="page">رزومه من</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="dash-header-part">
+    <div class="container">
+        <div class="row">
+
+            @await Component.InvokeAsync("UserInformationComponent", Guid.Parse(User.FindFirstValue("Id")!))
+
+            @await Component.InvokeAsync("UserStatisticalInformationComponent", Guid.Parse(User.FindFirstValue("Id")!))
+
+        </div>
+        @await Component.InvokeAsync("UserDashboardMenuComponent")
+
+    </div>
+</section>
+<section>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-12 mb-5 mt-5">
+                @if (ViewBag.Alert != null)
+                {
+                    <div class="alert alert-warning mx-2">@ViewBag.Alert</div>
+                }
+                <form asp-area="User" asp-controller="Dashboard" asp-action="MyResume" enctype="multipart/form-data">
+                    <div class="adpost-card">
+                        <div class="adpost-title">
+                            <h3> رزومه من  </h3>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group mt-1">
+                                    <label for="exampleFormControlInput1" style="font-weight:bold;">عنوان شغلی</label>
+                                    <input asp-for="Title" type="text" class="form-control">
+                                </div>
+
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group mt-1">
+                                    <label for="exampleFormControlInput1" style="font-weight:bold;">تاریخ تولد</label>
+                                    <input asp-for="Birthday" type="text" class="form-control">
+                                </div>
+
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group mt-1">
+                                    <label for="exampleFormControlInput1" style="font-weight:bold;">لینکدین</label>
+                                    <input asp-for="Linkdin" type="text" class="form-control">
+                                </div>
+
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">جنسیت </label>
+                                    <select asp-for="Gender" class="form-control custom-select">
+                                        @{
+                                            var enumValues = Enum.GetValues(typeof(Gender));
+                                            foreach (Gender gender in enumValues)
+                                            {
+                                                if (gender == Gender.Male)
+                                                {
+                                                                <option value="@gender">آقا</option>
+                                                }
+                                                if (gender == Gender.Female)
+                                                {
+                                                                <option value="@gender">خانم</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">وضعیت سربازی </label>
+                                    <select asp-for="MilitaryService" class="form-control custom-select">
+
+                                        <option selected disabled> یک گزینه انتخاب کنید</option>
+                                        <option value="‌پایان خدمت">پایان خدمت</option>
+                                        <option value="‌معافیت">معافیت</option>
+                                        <option value="‌معافیت تحصیلی">معافیت تحصیلی</option>
+                                        <option value="‌نامضخص">نامشخص</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">وضعیت تاهل </label>
+                                    <select asp-for="MaritalStatus" class="form-control custom-select">
+
+                                        <option selected disabled> یک گزینه انتخاب کنید</option>
+                                        <option value="‌مجرد">مجرد </option>
+
+                                        <option value="‌متاهل">متاهل</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">حقوق درخواستی </label>
+                                    <select asp-for="RightsRequested" class="form-control custom-select">
+                                        <option selected disabled> یک گزینه انتخاب کنید</option>
+                                        <option value="8میلیون تا 10 میلیون">8میلیون تا 10 میلیون</option>
+                                        <option value="12میلیون تا 15 میلیون">12میلیون تا 15 میلیون</option>
+                                        <option value="15میلیون تا 20 میلیون">15میلیون تا 20 میلیون</option>
+                                        <option value="20میلیون تا 25 میلیون">20میلیون تا 25 میلیون</option>
+                                        <option value="25میلیون تا 30 میلیون">25میلیون تا 30 میلیون</option>
+                                        <option value="30میلیون تا 35 میلیون">30میلیون تا 35 میلیون</option>
+                                        <option value="35میلیون تا 40 میلیون">35میلیون تا 40 میلیون</option>
+                                        <option value="40میلیون تا 45 میلیون">40میلیون تا 45 میلیون</option>
+                                        <option value="45میلیون تا 50 میلیون">45میلیون تا 50 میلیون</option>
+                                        <option value="توافقی">توافقی </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">سابقه کاری </label>
+                                    <select asp-for="WorkRegistration" class="form-control custom-select">
+                                        <option selected disabled> یک گزینه انتخاب کنید</option>
+
+                                        <option value="کمتر از 1 سال">کمتر از 1 سال</option>
+
+                                        <option value="1 سال"> 1 سال</option>
+                                        <option value="2 سال"> 2 سال</option>
+                                        <option value="3 سال"> 3 سال</option>
+                                        <option value="4 سال"> 4 سال</option>
+                                        <option value="5 سال"> 5 سال</option>
+                                        <option value="6 سال"> 6 سال</option>
+                                        <option value="7 سال"> 7 سال</option>
+                                        <option value="8 سال"> 8 سال</option>
+                                        <option value="9 سال"> 9 سال</option>
+                                        <option value="10 سال"> 10 سال</option>
+                                        <option value="بالای 10 سال">بالای 10 سال</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">مهارت‌ها </label>
+                                    <select id="tags" asp-for="UserSkills" class="form-control js-example-tokenizer" multiple="multiple">
+                                        @if (Model.UserSkills != null)
+                                        {
+                                            @foreach (var skill in Model.UserSkills.Where(w => !string.IsNullOrEmpty(w)))
+                                            {
+                                                <option selected>@skill</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <input type="hidden" id="Educationals" asp-for="JsonEducationals" />
+                            <input type="hidden" id="Experiences" asp-for="JsonExperiences" />
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="UserId" />
+                        </div>
+                        <hr />
+
+                        <div class="row">
+                            <div class="col-12 mt-5">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">نام شرکت / سازمان / مجموعه </th>
+                                            <th scope="col">شروع</th>
+                                            <th scope="col">پایان</th>
+                                            <th scope="col">توضیحات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="CompanyBody">
+                                        @if (Model.Experiences!=null )
+                                        {
+                                            @foreach (var item in Model.Experiences!)
+                                            {
+                                                <tr id="tr_@item.Id">
+                                                    <td>@item.Title</td>
+                                                     <td>@item.FromDate</td>
+                                                     <td>
+                                                        @if (item.IsActive)
+                                                        {
+                                                            <span>در حال فعالیت</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            @item.ToDate
+                                                        }
+                                                    </td>
+                                                     <td>
+                                                        <i class="fa-solid fa-envelope text-primary mx-3"></i>
+                                                        <i onclick="RemoveCompany('@item.Id')" class="mx-3 fa-solid fa-trash text-danger"></i>
+
+                                                     </td>
+                                                </tr>
+                                            }
+                                        }
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-12 mb-4">
+                                <h4>
+                                    سوابق کاری
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div class="form-group mt-1">
+                                    <label for="exampleFormControlInput1" style="font-weight:bold;">نام شرکت / سازمان / مجموعه</label>
+                                    <input id="CompanyName" type="text" class="form-control">
+                                </div>
+
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group mt-1">
+                                    <label for="exampleFormControlInput1" style="font-weight:bold;">از تاریخ</label>
+                                    <input id="CompanyFrom" type="text" class="form-control">
+                                </div>
+
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group mt-1">
+                                    <label for="exampleFormControlInput1" style="font-weight:bold;">تا تاریخ</label>
+                                    <input id="CompanyTo" type="text" class="form-control">
+                                </div>
+
+                            </div>
+                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="sale-check" style="font-weight:bold;">در حال فعالیت </label>
+                                    <label class="switch ">
+                                        <input type="checkbox" onclick="ChangeFromCompany()" id="CompanyStatus">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div class="form-group mt-1">
+                                    <label for="exampleFormControlInput1" style="font-weight:bold;">توضیحات </label>
+                                    <textarea class="form-control" id="CompanyDescription" rows="4"></textarea>
+                                </div>
+                                <a onclick="AddCompany()" class="btn btn-info text-white">افزودن</a>
+                            </div>
+
+
+
+
+                        </div>
+
+
+
+                        <div class="row">
+
+                            <div class="col-12 mt-5">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col"> نام دانشگاه / موسسه / آموزشگاه</th>
+                                            <th scope="col">شروع</th>
+                                            <th scope="col">پایان</th>
+                                            <th scope="col">توضیحات</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="AcademyBody">
+                                        @if (Model.Educationals != null)
+                                        {
+                                            @foreach (var item in Model.Educationals!)
+                                            {
+                                                <tr id="tr_@item.Id">
+                                                    <td>@item.Title</td>
+                                                    <td>@item.FromDate</td>
+                                                    <td>
+                                                        @if (item.IsActive)
+                                                        {
+                                                            <span>در حال آموزش</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            @item.ToDate
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <i class="fa-solid fa-envelope text-primary mx-3"></i>
+                                                        <i onclick="RemoveAcademy('@item.Id')" class="mx-3 fa-solid fa-trash text-danger"></i>
+
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                            <div class="col-12 mt-4 mb-4">
+                                <h4>
+                                    سوابق تحصیلی
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div class="form-group mt-1">
+                                    <label for="exampleFormControlInput1" style="font-weight:bold;">نام دانشگاه / موسسه / آموزشگاه</label>
+                                    <input id="AcademyName" type="text" class="form-control">
+                                </div>
+
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group mt-1">
+                                    <label for="exampleFormControlInput1" style="font-weight:bold;">از تاریخ</label>
+                                    <input id="AcademyFrom" type="text" class="form-control">
+                                </div>
+
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="form-group mt-1">
+                                    <label for="exampleFormControlInput1" style="font-weight:bold;">تا تاریخ</label>
+                                    <input id="AcademyTo" type="text" class="form-control">
+                                </div>
+
+                            </div>
+                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="sale-check" style="font-weight:bold;">در حال تحصیل </label>
+                                    <label class="switch ">
+                                        <input type="checkbox" onclick="ChangeFromAcademy()" id="AcademyStatus">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div class="form-group mt-1">
+                                    <label for="exampleFormControlInput1" style="font-weight:bold;">توضیحات </label>
+                                    <textarea id="AcademyDescription" class="form-control" rows="4"></textarea>
+                                </div>
+                                <a onclick="AddAcademy()" class="btn btn-info text-white">افزودن</a>
+                            </div>
+                        </div>
+                        <hr />
+                        <button type="submit" class="btn btn-sm btn-primary text-white mb-5">ثبت</button>
+                </form>
+            </div>
+</section> 

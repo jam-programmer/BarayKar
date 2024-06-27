@@ -1,0 +1,53 @@
+﻿@model Application.Cqrs.Identity.Role.UpdateRoleCommand
+@{
+    ViewData["Title"] = "ویرایش نقش";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="container">
+    <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="lh-1-85 breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">پیشخوان</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="Role" asp-action="Index">مدیریت نقش کاربران</a>
+                </li>
+                <li class="breadcrumb-item active">ویرایش نقش </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-xl-6 col-lg-6 col-sm-12 offset-xl-3 offset-lg-3 offset-md-3">
+            <div class="card mb-4">
+                <form asp-area="Admin" asp-controller="Role" asp-action="Edit">
+                    <h5 class="card-header heading-color">ویرایش نقش </h5>
+                    @if (ViewBag.Alert != null)
+                    {
+                        <div class="mx-3 alert alert-warning">@ViewBag.Alert</div>
+                    }
+                    <div class="card-body demo-vertical-spacing demo-only-element">
+                        <div>
+                            <label for="defaultFormControlInput" class="form-label">نام فارسی نقش</label>
+                            <input asp-for="PresianName" type="text" class="form-control" id="defaultFormControlInput"
+                                   placeholder="نام فارسی نقش" aria-describedby="defaultFormControlHelp">
+                            <span class="text-danger" asp-validation-for="PresianName"></span>
+                        </div>
+
+                        <div>
+                            <label for="defaultFormControlInput" class="form-label">نام انگلیسی نقش</label>
+                            <input asp-for="Name" type="text" class="form-control" id="defaultFormControlInput"
+                                   placeholder="نام انگلیسی نقش" aria-describedby="defaultFormControlHelp">
+                            <span class="text-danger" asp-validation-for="Name"></span>
+                        </div>
+                        <input type="hidden" asp-for="Id"/>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-sm rounded-pill btn-success">ثبت</button>
+                        <a asp-area="Admin" asp-controller="Role" asp-action="Index" class="btn btn-sm rounded-pill btn-warning text-white">بازگشت</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

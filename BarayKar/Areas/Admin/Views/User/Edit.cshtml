@@ -1,0 +1,161 @@
+﻿@model Application.Cqrs.Identity.User.UpdateUserCommand
+@{
+    ViewData["Title"] = "ویرایش کاربر";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+@section Style {
+
+    <link rel="stylesheet" href="~/assets/vendor/libs/select2/select2.css">
+}
+@section Script {
+    <script>
+        $(document).ready(function () {
+            $('#select2Multiple').select2();
+        });
+    </script>
+    <script src="~/assets/js/upload.js"></script>
+    <script src="~/assets/vendor/libs/select2/select2.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+}
+<div class="container">
+    <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="lh-1-85 breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">پیشخوان</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="User" asp-action="Index">مدیریت کاربران</a>
+                </li>
+                <li class="breadcrumb-item active">ویرایش کاربر </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-xl-8 col-lg-8 col-sm-12 offset-xl-2 offset-lg-2 offset-md-2">
+            <div class="card mb-4">
+                <form asp-area="Admin" asp-controller="User" asp-action="Edit" enctype="multipart/form-data">
+                    <h5 class="card-header heading-color">ویرایش کاربر </h5>  @if (ViewBag.Alert != null)
+                    {
+                        <div class="mx-3 alert alert-warning">@ViewBag.Alert</div>
+                    }
+                    <div class="card-body demo-vertical-spacing demo-only-element">
+
+                        <div class="row">
+                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+
+                                <div class="avatar avatar-xl">
+                                    @if (Model.Avatar == "defaultAvatar.jpg" || Model.Avatar == "notFound.jpg")
+                                    {
+                                        <img id="imagePath_1" src="~/Gallery/defaultAvatar.jpg"  class="rounded-circle">
+                                    }
+                                    else
+                                    {
+                                            <img id="imagePath_1" src="~/Gallery/User/@Model.Avatar" class="rounded-circle">
+
+                                    }
+                                
+                                </div>
+                                <input type="hidden" asp-for="Avatar" />
+                                <input type="hidden" asp-for="Id"/>
+                                <div class="mb-3">
+                                    <label for="formFile" class="form-label">آپلود تصویر</label>
+                                    <input class="form-control" asp-for="AvatarFile" onchange="ChangeImage(this,1)" type="file" id="formFile">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">نام  </label>
+                                    <input asp-for="FirstName" type="text" class="form-control"
+                                           placeholder="نام  " aria-describedby="defaultFormControlHelp">
+                                    <span class="text-danger" asp-validation-for="FirstName"></span>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">نام خانوادگی  </label>
+                                    <input asp-for="LastName" type="text" class="form-control"
+                                           placeholder="نام خانوادگی" aria-describedby="defaultFormControlHelp">
+                                    <span class="text-danger" asp-validation-for="LastName"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">ایمیل</label>
+                                    <input asp-for="Email" type="text" class="form-control"
+                                           placeholder="ایمیل" aria-describedby="defaultFormControlHelp">
+                                    <span class="text-danger" asp-validation-for="Email"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">شماره موبایل</label>
+                                    <input asp-for="PhoneNumber" type="text" class="form-control"
+                                           placeholder="شماره موبایل" aria-describedby="defaultFormControlHelp">
+                                    <span class="text-danger" asp-validation-for="PhoneNumber"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">کدملی </label>
+                                    <input asp-for="UserName" type="text" class="form-control"
+                                           placeholder=" کد ملی" aria-describedby="defaultFormControlHelp">
+                                    <span class="text-danger" asp-validation-for="UserName"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">رمز عبور </label>
+                                    <input asp-for="Password" type="text" class="form-control"
+                                           placeholder="رمز عبور" aria-describedby="defaultFormControlHelp">
+                                    <span class="text-danger" asp-validation-for="Password"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">  نقش‌ کاربر </label>
+                                    <div class="form-control-wrap">
+
+                                        <select id="select2Multiple" class="select2 form-select select2-hidden-accessible" multiple=""
+                                                data-select2-id="select2Multiple" tabindex="-1"
+                                                data-placeholder="یک یا چند گزینه را انتخاب کنید"
+                                                asp-for="Roles" asp-items="@ViewBag.Roles" aria-hidden="true">
+                                        </select>
+                                    </div>
+
+                                    <span class="text-danger" asp-validation-for="Roles"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+                                <div class="form-check form-switch mt-2">
+                                    <input asp-for="Active" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" >
+                                    <label class="form-check-label" for="flexSwitchCheckChecked">فعالسازی حساب کاربری</label>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-sm rounded-pill btn-success">ثبت</button>
+                        <a asp-area="Admin" asp-controller="User" asp-action="Index" class="btn btn-sm rounded-pill btn-warning text-white">بازگشت</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+

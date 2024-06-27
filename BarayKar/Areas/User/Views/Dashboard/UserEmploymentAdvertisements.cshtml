@@ -1,0 +1,107 @@
+﻿@model Application.Common.Model.PaginatedList<UserEmploymentAdvertisementViewModel>
+@{
+    ViewData["Title"] = "آگهی‌های من";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section Style {
+    <link rel="stylesheet" href="~/main/css/custom/ad-post.css">
+    <link rel="stylesheet" href="~/main/css/custom/profile.css">
+}
+@section Script {
+
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<section class="single-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="single-content">
+                    <h2>پروفایل</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="index.html">صفحه اصلی</a>
+                        </li>
+                        <li class="breadcrumb-item" aria-current="page">آگهی‌های من</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="dash-header-part">
+    <div class="container">
+        <div class="row">
+
+            @await Component.InvokeAsync("UserInformationComponent", Guid.Parse(User.FindFirstValue("Id")!))
+
+            @await Component.InvokeAsync("UserStatisticalInformationComponent", Guid.Parse(User.FindFirstValue("Id")!))
+
+        </div>
+        @await Component.InvokeAsync("UserDashboardMenuComponent")
+
+    </div>
+</section>
+<section>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-12 mb-5 mt-5">
+
+
+                <div class="adpost-card">
+                    <div class="adpost-title">
+                        <h3> آگهی‌های من </h3>
+                    </div> 
+                    <form asp-action="UserEmploymentAdvertisements" asp-area="User" asp-controller="Dashboard" method="get">
+                        <div class="row d-flex justify-content-start mb-3">
+                            <div class="col-md-3">
+                                <a asp-controller="Dashboard" asp-action="AddEmployment" asp-area="User" class="btn btn-sm btn-success text-white">ایجاد آگهی جدید</a>
+
+
+                            </div>
+
+                            <div class="col-md-3">
+                                <input type="text" name="Keyword" class="form-control form-control-sm" style="height:40px !important" />
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-sm btn-primary" style="padding:8px 12px !important;"><i class="fa-solid fa-magnifying-glass text-white"></i></button>
+                                <a asp-action="UserEmploymentAdvertisements" asp-area="User" asp-controller="Dashboard" class="btn btn-sm btn-success" style="padding:8px 12px !important;"><i class="fa-solid fa-rotate-right text-white"></i></a>
+
+
+                            </div>
+
+                        </div>
+                    </form>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+
+                                <th scope="col">نام</th>
+                                <th scope="col">شناسه</th>
+                                <th scope="col">کسب و کار</th>
+                                <th scope="col">عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.List!)
+                            {
+                                <tr>
+                                    <td>@item.Title</td>
+                                    <td>@item.Code</td>
+                                    <td>@item.BusinessAccountName</td>
+                                    <td>
+                                        <a asp-area="User" asp-controller="Dashboard" asp-action="EditEmployment" asp-route-Id="@item.Id"><i class="mx-1 fa-solid fa-pen-to-square text-warning"></i></a>
+                                        <a><i class="mx-1 fa-solid fa-trash text-danger"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+</section>

@@ -1,0 +1,50 @@
+﻿@model List<CategoryFilterViewModel>
+
+
+<div class="col-md-6 col-lg-12">
+    <div class="product-sidebar">
+        <div class="product-sidebar-title">
+            <h6>فیلتر بر اساس دسته بندی</h6>
+        </div>
+        <div class="product-sidebar-content">
+            <ul class="nasted-dropdown">
+              
+                @foreach(var item in Model.Where(w=>w.ParentCategoryId==null))
+                {
+                    <li>
+                        <div class="nasted-menu">
+                            <p>
+                                <input type="checkbox" onchange="OptionQuery()" name="category" Id="@item.Id" class="mt-2 " />    <span></span> @item.Name
+                            </p>
+
+                            @if(Model.Any(a=>a.ParentCategoryId==item.Id))
+                            {
+                                <i class="fas fa-chevron-down"></i>
+                            }
+
+                           
+                        </div>
+                        @if (Model.Any(a => a.ParentCategoryId == item.Id))
+                        {
+                            <ul class="nasted-menu-list">
+
+                                @foreach (var subItem in Model.Where(w => w.ParentCategoryId == item.Id))
+                                {
+                                    <li>
+                                        <input type="checkbox" onchange="OptionQuery()" name="category" Id="@subItem.Id" class="mt-2" /><span class="mr-2">@subItem.Name</span>
+                                    </li>
+                                 
+                                }
+
+                            </ul>
+                        }
+
+                        
+                    </li>
+                }
+
+            </ul>
+            <button onclick="ClearQuery()" class="product-filter-btn"><i class="fas fa-broom"></i><span>حذف فیلتر</span></button>
+        </div>
+    </div>
+</div>

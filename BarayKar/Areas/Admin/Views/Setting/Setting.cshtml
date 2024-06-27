@@ -1,0 +1,218 @@
+﻿@model Application.Cqrs.Setting.UpdateSettingCommand
+@{
+    ViewData["Title"] = "تنظیمات";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Script {
+
+    <script src="~/assets/js/upload.js"></script>
+
+}
+<div class="container">
+    <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="lh-1-85 breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">پیشخوان</a>
+                </li>
+                
+                <li class="breadcrumb-item active">تنظیمات</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xl-12 col-lg-12 col-sm-12 ">
+            <div class="card mb-4">
+                <form asp-area="Admin" asp-controller="setting" asp-action="setting" enctype="multipart/form-data">
+                    <h5 class="card-header heading-color"> تنظیمات </h5>
+                    @if (ViewBag.Alert != null)
+                    {
+                        <div class="mx-3 alert alert-warning">@ViewBag.Alert</div>
+                    }
+                    <div class="card-body demo-vertical-spacing demo-only-element">
+
+                        <div class="row">
+                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+
+                                <div class="avatar avatar-xl">
+                                
+                                    @if (Model.Logo == "defaultAvatar.jpg" || Model.Logo == "notFound.jpg")
+                                    {
+                                        <img id="imagePath_1"  id="imagePath_1" src="~/Gallery/defaultAvatar.jpg" class="rounded-circle">
+                                    }
+                                    else
+                                    {
+                                        <img id="imagePath_1" id="imagePath_1" src="~/Gallery/Setting/@Model.Logo" class="rounded-circle">
+
+                                    }
+                                </div>
+                                <div class="mb-3">
+                                    <label for="formFile" class="form-label">آپلود تصویر</label>
+                                    <input class="form-control" asp-for="LogoFile" onchange="ChangeImage(this,1)" type="file" id="formFile">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <input type="hidden" asp-for="Logo"/>
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div>
+                                    <label class="form-label">عنوان سایت</label>
+                                    <input asp-for="TitleSite" type="text" class="form-control"
+                                           placeholder=" عنوان سایت" >
+                                  
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div>
+                                    <label class="form-label"> شماره موبایل / شماره تلفن</label>
+                                    <input asp-for="Number" type="tel" class="form-control"
+                                           placeholder=" شماره موبایل / شماره تلفن">
+                              
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <div>
+                                    <label class="form-label">ایمیل </label>
+                                    <input asp-for="Email" type="email" class="form-control"
+                                           placeholder=" ایمیل " >
+                                    
+                                </div>
+                            </div>
+
+
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div>
+                                    <label class="form-label">اینستاگرام </label>
+                                    <input asp-for="Instagram" type="text" class="form-control"
+                                           placeholder=" اینستاگرام ">
+                                    
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div>
+                                    <label class="form-label">واتساپ </label>
+                                    <input asp-for="WhatsApp" type="text" class="form-control"
+                                           placeholder=" واتساپ ">
+                                   
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div>
+                                    <label class="form-label">تلگرام </label>
+                                    <input asp-for="Telegram" type="text" class="form-control"
+                                           placeholder=" تلگرام ">
+                                   
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div>
+                                    <label class="form-label">لینکدین </label>
+                                    <input asp-for="Linkdin" type="text" class="form-control"
+                                           placeholder=" لینکدین ">
+                                 
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div>
+                                    <label class="form-label">شماره پیامکی </label>
+                                    <input asp-for="ApiNumber" type="text" class="form-control"
+                                           placeholder=" شماره پیامکی ">
+
+                                </div>
+                            </div>
+
+                            <div class="col-xl-9 col-lg-9 col-md-6 col-sm-12">
+                                <div>
+                                    <label class="form-label">شناسه پیامکی </label>
+                                    <input asp-for="ApiSms" type="text" class="form-control"
+                                           placeholder=" شناسه پیامکی ">
+
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">سربرگ</label>
+                                    <textarea asp-for="Header" type="text" class="form-control" rows="7"
+                                              placeholder=" سربرگ">
+                                          </textarea>
+                                   
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">پابرگ</label>
+                                    <textarea asp-for="Footer" type="text" class="form-control" rows="7"
+                                              placeholder=" پابرگ">
+                                          </textarea>
+                                    
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">عنوان نمایشی</label>
+                                    <input asp-for="MainText" type="text" class="form-control"
+                                           placeholder=" عنوان نمایشی">
+
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">عنوان درباره ما</label>
+                                    <input asp-for="AboutSectionTitle" type="text" class="form-control"
+                                           placeholder="عنوان درباره ما">
+
+                                </div>
+                            </div>
+
+
+
+
+
+
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">متن نمایشی صفحه اصلی</label>
+                                    <textarea asp-for="MainSubText" type="text" class="form-control" rows="7"
+                                              placeholder=" متن نمایشی">
+                                          </textarea>
+
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">توضیح کوتاه</label>
+                                    <textarea asp-for="AboutSectionDescription" type="text" class="form-control" rows="7"
+                                              placeholder="توضیح کوتاه">
+                                          </textarea>
+
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-sm rounded-pill btn-success">ثبت</button>
+                        <a asp-area="Admin" asp-controller="Province" asp-action="Index" class="btn btn-sm rounded-pill btn-warning text-white">بازگشت</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

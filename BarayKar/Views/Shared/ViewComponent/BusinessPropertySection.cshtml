@@ -1,0 +1,19 @@
+﻿@model List<PropertyBusinessViewModel>
+
+<div class="ad-details-card">
+    <div class="ad-details-title">
+        <h5>مشخصات </h5>
+    </div>
+    <div class="ad-details-specific">
+        <ul>
+           
+           @foreach(var item in Model)
+            {
+                <li>
+                    <h6>@item.Key: </h6>
+                    <p>@item.Value</p>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

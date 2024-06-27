@@ -1,0 +1,155 @@
+﻿
+
+@{
+    ViewData["Title"] = "پنل کاربری";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Style{
+    <link rel="stylesheet" href="~/main/css/custom/profile.css">
+}
+<section class="single-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="single-content">
+                    <h2>پروفایل</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="index.html">صفحه اصلی</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">پروفایل</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="dash-header-part">
+    <div class="container">
+        <div class="row">
+          
+            @await Component.InvokeAsync("UserInformationComponent", @ViewBag.UserId)
+
+            @await Component.InvokeAsync("UserStatisticalInformationComponent", @ViewBag.UserId)
+
+        </div>
+        @await Component.InvokeAsync("UserDashboardMenuComponent")
+    </div>
+</section>
+<section class="profile-part">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="account-card">
+                    <div class="account-title">
+                        <h3>مقدمه </h3>
+                    </div>
+                    <div class="profile-intro">
+                        <div class="profile-author">
+                            <a href="#">
+                                <img src="images/avatar/01.jpg" alt="01">
+                            </a>
+                            <h4>جعفر عباسی</h4>
+                            <p>
+                                <span>عضو شده:</span>1399/12/12
+                            </p>
+                        </div>
+                        <ul class="account-list">
+                            <li>
+                                <h6>مجموع سفارش:</h6>
+                                <p>07</p>
+                            </li>
+                            <li>
+                                <h6>لغو سفارش:</h6>
+                                <p>02</p>
+                            </li>
+                            <li>
+                                <h6>خرج کنید:</h6>
+                                <p>98000 تومان</p>
+                            </li>
+                            <li>
+                                <h6>وضعیت سفارش:</h6>
+                                <p>01</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="account-card">
+                    <div class="account-title">
+                        <h3>اطلاعات تماس </h3>
+                    </div>
+                    <ul class="account-list">
+                        <li>
+                            <h6>وب سایت:</h6>
+                            <p>www.richardwilliam.com</p>
+                        </li>
+                        <li>
+                            <h6>ایمیل:</h6>
+                            <p>richard@example.com</p>
+                        </li>
+                        <li>
+                            <h6>تلفن:</h6>
+                            <p>+12027953213</p>
+                        </li>
+                        <li>
+                            <h6>اسکایپ:</h6>
+                            <p>پخش زنده</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="account-card">
+                    <div class="account-title">
+                        <h3>آدرس حمل و نقل</h3>
+                    </div>
+                    <ul class="account-list">
+                        <li>
+                            <h6>کد پستی:</h6>
+                            <p>1420</p>
+                        </li>
+                        <li>
+                            <h6>منطقه:</h6>
+                            <p>قزلناو</p>
+                        </li>
+                        <li>
+                            <h6>شهر:</h6>
+                            <p>شاهین دژ</p>
+                        </li>
+                        <li>
+                            <h6>کشور:</h6>
+                            <p>ایران</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="account-card">
+                    <div class="account-title">
+                        <h3>ادرس</h3>
+                    </div>
+                    <ul class="account-list">
+                        <li>
+                            <h6>کد پستی:</h6>
+                            <p>1100</p>
+                        </li>
+                        <li>
+                            <h6>منطقه:</h6>
+                            <p>شهید رجایی</p>
+                        </li>
+                        <li>
+                            <h6>شهر:</h6>
+                            <p>داها</p>
+                        </li>
+                        <li>
+                            <h6>کشور:</h6>
+                            <p>ایران</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

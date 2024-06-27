@@ -1,0 +1,116 @@
+﻿@model IEnumerable<BusinessViewModel>
+
+
+<section class="section recomend-part">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-center-heading">
+                    <h2>
+                        جدیدترین  <span>کسب و کارها   </span>
+                    </h2>
+                    @*  <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. .</p>
+                    *@
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="recomend-slider">
+
+
+                    @foreach (var item in Model)
+                    {
+
+                        
+                            string path = "../Gallery/"; 
+                            if (item.BusinessPictureImage == "defaultAvatar.jpg" || item.BusinessPictureImage == "notFound.jpg")
+                            {
+                                path += item.BusinessPictureImage;
+                            }
+                            else
+                            {
+                                path += "Business/" + item.BusinessPictureImage;
+                            }
+                        
+                          
+                          
+
+                        <div class="product-card">
+                            <div class="product-head">
+                                <div class="product-img"
+                                     style="background:url(@path) no-repeat center; background-size:cover;">
+                                
+                                    <span class="flat-badge booking">کد: @item.Code </span>
+                                    <ul class="product-meta">
+                                        <li>
+                                            <i class="fas fa-eye"></i>
+                                            <p>264</p>
+                                        </li>
+                                        <li>
+                                            <i class="fas fa-mouse"></i>
+                                            <p>134</p>
+                                        </li>
+                                        <li>
+                                            <i class="fas fa-star"></i>
+                                            <p>4.5/7</p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <div class="product-tag">
+                                    <i class="fas fa-tags"></i>
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item">
+                                            <a>@item.CategoryName </a>
+                                        </li>
+                                    </ol>
+                                </div>
+                                <div class="product-title">
+                                    <h5>
+                                        <a asp-controller="Business" asp-action="Detail"
+                                           asp-route-Id="@item.Id">@item.AccountName</a>
+                                    </h5>
+                                    <ul class="product-location">
+                                        <li>
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <p>
+                                                @item.ProvinceName - @item.CityName
+                                            </p>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="product-details">
+                                    <div class="product-price">
+                                        <a asp-controller="Business" asp-action="Detail"
+                                           asp-route-Id="@item.Id"  class="text-primary">مشاهده</a>
+                                    </div>
+                                    <ul class="product-widget">
+                                        <li>
+                                            <button class="tooltip">
+                                                <i class="far fa-heart"></i>
+                                                <span class="tooltext top">نشانک </span>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="center-50">
+                    <a asp-controller="Business" asp-action="AllBusiness" class="btn btn-inline">
+                        <i class="fas fa-eye"></i>
+                        <span>مشاهده همه کسب و کارها</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
