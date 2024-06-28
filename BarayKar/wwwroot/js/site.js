@@ -12,3 +12,19 @@ function RandomId() {
     }
     return id
 }
+ function SendEmploymentRequest(id) {
+   
+     rest.postAsync("/Employment/SendRequest", null, id, function (isSuccess, response) {
+        if (response.isSuccess) {
+            console.log("YES");
+        } else {
+      
+            Swal.fire({
+                title: "درخواست ارسال نشد",
+                text: response.message[0],
+                icon: "warning",
+                confirmButtonText: "متوجه شدم"
+            });
+        }
+    });
+}

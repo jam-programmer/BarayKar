@@ -1,4 +1,5 @@
 ﻿
+using Domain.Entities.Employment;
 using Domain.Entities.System.Identity;
 using Domain.Enum;
 
@@ -19,5 +20,7 @@ namespace Domain.Entities.Resume
         public UserEntity? User { set; get; }
         public ICollection<EducationalRecordEntity>? Educationals { set; get; }   
         public ICollection<WorkExperienceEntity>? Experiences { set; get; }
+
+        public ICollection<EmploymentRequestEntity>? Requests { set; get; }
     }
 }

@@ -34,6 +34,7 @@ namespace Infrastructure.Configuration.Contexts
         public virtual DbSet<WorkExperienceEntity> Experience { set; get; }
         public virtual DbSet<EducationalRecordEntity> EducationalRecord { set; get; }
         public virtual DbSet<ResumeEntity> Resume { set; get; }
+        public virtual DbSet<EmploymentRequestEntity> EmploymentRequest { set; get; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder builder)

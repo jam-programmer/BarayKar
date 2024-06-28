@@ -1,6 +1,8 @@
 ﻿using Application.Common;
 using Application.Common.Interfaces;
 using Application.Common.Record;
+using Application.Common.ViewModel.Business;
+using Application.Common.ViewModel.Employment;
 using Application.Common.ViewModel.Home;
 using Domain.Entities.Business;
 using Domain.Entities.Employment;
@@ -66,7 +68,7 @@ namespace Application.Factories.Home
         /// </summary>
         /// <param name="cancellation"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<BusinessViewModel>>
+        public async Task<LastBusinessViewModel>
             GetLastBusinessesAsync(CancellationToken cancellation = default)
         {
             var query = await _businessRepository.GetByQueryAsync();
@@ -87,9 +89,11 @@ namespace Application.Factories.Home
                     BusinessPictureImage = s.Pictures!.FirstOrDefault()!.Image
                 })
                 .ToListAsync();
-            IEnumerable<BusinessViewModel> businesses = new List<BusinessViewModel>();
-            businesses = model.Adapt<List<BusinessViewModel>>();
-            return businesses;
+            LastBusinessViewModel business = new();
+            business.businesses = model.Adapt<List<BusinessViewModel>>();
+            var setting = await GetSettingFromCacheAsync(cancellation);
+            business.BusinessText = setting.BusinessText;
+            return business;
         }
 
         /// <summary>
@@ -172,7 +176,7 @@ namespace Application.Factories.Home
         /// <param name="cancellation"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<IEnumerable<EmploymentViewModel>> GetLastEmploymentAsync(CancellationToken cancellation = default)
+        public async Task<LastEmploymentViewModel> GetLastEmploymentAsync(CancellationToken cancellation = default)
         {
             var query = await _employmentRepository.GetByQueryAsync();
             var model = await query
@@ -192,10 +196,12 @@ namespace Application.Factories.Home
                      Image = s.Business!.Pictures!.FirstOrDefault()!.Image
                  })
                  .ToListAsync();
-            IEnumerable<EmploymentViewModel> employments =
-                new List<EmploymentViewModel>();
-            employments = model.Adapt<List<EmploymentViewModel>>();
-            return employments;
+            LastEmploymentViewModel employment =
+                new ();
+            employment.employments = model.Adapt<List<EmploymentViewModel>>();
+            var setting = await GetSettingFromCacheAsync(cancellation);
+            employment.EmploymentText = setting.EmploymentText;
+            return employment;
         }
         /// <summary>
         /// 
@@ -310,9 +316,10 @@ namespace Application.Factories.Home
             return logo;
         }
 
-        public async Task<List<ProvinceInfoViewModel>> GetProvinceInfoAsync(CancellationToken cancellation = default)
+        public async Task<ProvinceViewModel> GetProvinceInfoAsync(CancellationToken cancellation = default)
         {
-            
+            ProvinceViewModel province = new();
+
             var query = await _provinceRepository.GetByQueryAsync();
             var model = await query.Include(i => i.Employments).Take(6)
                 .Select(s => new ProvinceInfoViewModel
@@ -323,11 +330,15 @@ namespace Application.Factories.Home
                     AdsCount = s.Employments!.Count()
 
                 }).ToListAsync(cancellation);
-            return model;
+            province.provinces = model;
+            var setting = await GetSettingFromCacheAsync(cancellation);
+            province.ProvinceText = setting.ProvinceText;
+            return province;
         }
 
-        public async Task<List<CategoryInfoViewModel>> GetCategoriesAsync(CancellationToken cancellation =default)
+        public async Task<CategoryViewModel> GetCategoriesAsync(CancellationToken cancellation =default)
         {
+            CategoryViewModel category = new();
             var query = await _categoryRepository.GetByQueryAsync();
             var model = await query.Where(w => w.ParentCategoryId == null)
                 .Include(i => i.Businesses)
@@ -347,8 +358,27 @@ namespace Application.Factories.Home
                         Count = c.Businesses!.Count()
                     }).ToList()
                 }).ToListAsync(cancellation);
+            category.categories = model;
+            var setting = await GetSettingFromCacheAsync(cancellation);
+            category.CategoryText = setting.CategoryText;
+            return category;
+        }
 
-            return model;
+        public async Task<SocialFooterViewModel> GetSocialsAsync(CancellationToken cancellation = default)
+        {
+            var setting = await GetSettingFromCacheAsync(cancellation);
+            SocialFooterViewModel social = new();
+            social = setting.Adapt<SocialFooterViewModel>();
+            return social;
+        }
+
+        public async Task<InfoContactFooterViewModel> GetInfoContactAsync
+            (CancellationToken cancellation = default)
+        {
+            InfoContactFooterViewModel info = new();
+            var setting = await GetSettingFromCacheAsync(cancellation);
+            info= setting.Adapt<InfoContactFooterViewModel>();
+            return info;
         }
     }
 }

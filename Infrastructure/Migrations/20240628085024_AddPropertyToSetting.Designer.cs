@@ -4,6 +4,7 @@ using Infrastructure.Configuration.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SqlServerContext))]
-    partial class SqlServerContextModelSnapshot : ModelSnapshot
+    [Migration("20240628085024_AddPropertyToSetting")]
+    partial class AddPropertyToSetting
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -284,34 +287,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Employment", "Emp");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Employment.EmploymentRequestEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("EmploymentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ResumeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmploymentId")
-                        .IsUnique();
-
-                    b.HasIndex("ResumeId");
-
-                    b.ToTable("EmploymentRequest", "Emp");
                 });
 
             modelBuilder.Entity("Domain.Entities.Resume.EducationalRecordEntity", b =>
@@ -759,7 +734,7 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9452cc01-ef5d-4db7-97c8-b0312dff0152")
+                            Id = new Guid("e239559f-55e4-45cc-92b8-a58599b0df6f")
                         });
                 });
 
@@ -910,25 +885,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Employment.EmploymentRequestEntity", b =>
-                {
-                    b.HasOne("Domain.Entities.Employment.EmploymentEntity", "Employment")
-                        .WithOne("Request")
-                        .HasForeignKey("Domain.Entities.Employment.EmploymentRequestEntity", "EmploymentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Resume.ResumeEntity", "Resume")
-                        .WithMany("Requests")
-                        .HasForeignKey("ResumeId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Employment");
-
-                    b.Navigation("Resume");
-                });
-
             modelBuilder.Entity("Domain.Entities.Resume.EducationalRecordEntity", b =>
                 {
                     b.HasOne("Domain.Entities.Resume.ResumeEntity", "Resume")
@@ -1044,18 +1000,11 @@ namespace Infrastructure.Migrations
                     b.Navigation("Times");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Employment.EmploymentEntity", b =>
-                {
-                    b.Navigation("Request");
-                });
-
             modelBuilder.Entity("Domain.Entities.Resume.ResumeEntity", b =>
                 {
                     b.Navigation("Educationals");
 
                     b.Navigation("Experiences");
-
-                    b.Navigation("Requests");
                 });
 
             modelBuilder.Entity("Domain.Entities.System.CategoryEntity", b =>

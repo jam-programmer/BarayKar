@@ -1,4 +1,4 @@
-﻿@model List<ProvinceInfoViewModel>
+﻿@model ProvinceViewModel
 
 
 
@@ -10,13 +10,13 @@
                     <h2>
                        در هر استانی که هستید <span>استخدام شوید </span>
                     </h2>
-                    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. .</p>
+                <p>@Model.ProvinceText</p> 
                 </div>
             </div>
         </div>
         <div class="row">
 
-            @foreach (var item in Model)
+            @foreach (var item in Model.provinces!)
             {
                 string path = string.Empty;
 
@@ -32,7 +32,7 @@
                 <div class="col-sm-6 col-md-6 col-lg-4">
                     <div class="city-card" style="background:url(@path) no-repeat center; background-size: cover;">
                         <h5>
-                            <a href="/Employment/AllEmployment?province=@item.Id">@item.Name</a>
+                            <a href="/Employment/Explore?province=@item.Id">@item.Name</a>
                         </h5>
                         <p> آگهی‌ استخدام(@item.AdsCount) </p>
                     </div>

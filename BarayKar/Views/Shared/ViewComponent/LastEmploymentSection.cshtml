@@ -1,5 +1,4 @@
-﻿@model IEnumerable<EmploymentViewModel>
-
+﻿@model LastEmploymentViewModel
 
 
 
@@ -11,13 +10,13 @@
                     <h2>
                       جدیدترین <span>آگهی‌های استخدام   </span>
                     </h2>
-                    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. .</p>
+                <p>@Model.EmploymentText</p>   
                 </div>
             </div>
         </div>
         <div class="row">
     
-            @foreach(var item in Model)
+            @foreach(var item in Model.employments!)
             {
                 string path = "../Gallery/";
                 if (item.Image == "defaultAvatar.jpg" || item.Image == "notFound.jpg")
@@ -100,7 +99,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="center-20">
-                    <a asp-controller="Employment" asp-action="AllEmployment" class="btn btn-inline">
+                    <a asp-controller="Employment" asp-action="Explore" class="btn btn-inline">
                         <i class="fas fa-eye"></i>
                         <span>مشاهده همه آگهی‌های استخدام</span>
                     </a>

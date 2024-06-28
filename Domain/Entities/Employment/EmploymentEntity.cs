@@ -34,6 +34,8 @@ namespace Domain.Entities.Employment
 
         public Guid? BusinessId { set; get; }
         public BusinessEntity? Business { set; get; }
+
+        public EmploymentRequestEntity? Request { set; get; }
         #endregion
     }
 }

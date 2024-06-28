@@ -1,0 +1,27 @@
+﻿@model InfoContactFooterViewModel
+
+<div class="col-sm-6 col-md-6 col-lg-3">
+    <div class="footer-content">
+        <h3>تماس با ما</h3>
+        <ul class="footer-address">
+            <li>
+                <i class="fas fa-map-marker-alt"></i>
+                <p>
+                  @Model.Address
+                </p>
+            </li>
+            <li>
+                <i class="fas fa-envelope"></i>
+                <p>
+                  @Model.Email
+                </p>
+            </li>
+            <li>
+                <i class="fas fa-phone-alt"></i>
+                <p>
+                   @Model.Number
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>

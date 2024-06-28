@@ -69,7 +69,6 @@ namespace BarayKar.Controllers
             return View(record);
         }
 
-
-
+       
     }
 }

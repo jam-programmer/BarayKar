@@ -1,11 +1,11 @@
-﻿@model EmploymentsViewModel
+﻿@model BusinessesViewModel
 @{
-    ViewData["Title"] = "آگهی‌های استخدام";
+    ViewData["Title"] = "کسب و کارها";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-@section Style {
+@section Style{
     <link rel="stylesheet" href="~/main/css/custom/leftbar-list.css">
-
+  
 }
 
 @section Script {
@@ -13,24 +13,24 @@
     <script src="~/js/lib-pagination.min.js"></script>
     <script src="~/js/pagination.js"></script>
     <script src="~/js/exploreQuery.js"></script>
-
+   
 }
+
 <section class="single-banner">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <div class="single-content">
-                    <h2>لیست آگهی‌های استخدام </h2>
+                    <h2>لیست کسب و کارها </h2>
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">صفحه اصلی</a></li>
-                        <li class="breadcrumb-item text-white" aria-current="page">آگهی‌های استخدام</li>
+                        <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                        <li class="breadcrumb-item text-white" aria-current="page">کسب و کارها</li>
                     </ol>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
 
 <section class="ad-list-part">
     <div class="container">
@@ -40,7 +40,7 @@
                     <div class="product-page-number">
                         <p>نمایش 1-0 از 130 نتیجه</p>
                     </div>
-
+                  
                     <ul class="product-card-type">
                         <li class="grid-verti active">
                             <i class="fas fa-grip-vertical"></i>
@@ -57,37 +57,37 @@
                 <div class="row">
                     <div class="col-md-6 col-lg-12">
                         <div class="product-sidebar">
-
+                           
                             <div class="product-sidebar-title">
                                 <h6>فیلتر بر اساس عنوان </h6>
                             </div>
                             <div class="product-sidebar-content">
                                 <div class="product-sidebar-search">
                                     <input id="search" type="text" placeholder="جستجو">
-                                </div>
+                                </div> 
                             </div>
                             <button type="button" onclick="SearchQuery()" class="product-filter-btn"><i class="fas fa-search"></i><span>جستجو </span></button>
                         </div>
                     </div>
 
-                    @await Component.InvokeAsync("FilterBusinessComponent")
+                    @await Component.InvokeAsync("FilterCategoryComponent")
                     @await Component.InvokeAsync("FilterProvinceComponent")
                 </div>
             </div>
             <div class="col-lg-9">
                 <div class="row">
-                    @if (Model.Employments != null)
+                    @if (Model.Businesses != null)
                     {
-                        @foreach (var item in Model.Employments!)
+                        @foreach (var item in Model.Businesses!)
                         {
                             string path = "../Gallery/";
-                            if (item.Image == "defaultAvatar.jpg" || item.Image == "notFound.jpg")
+                            if (item.BusinessPictureImage == "defaultAvatar.jpg" || item.BusinessPictureImage == "notFound.jpg")
                             {
-                                path += item.Image;
+                                path += item.BusinessPictureImage;
                             }
                             else
                             {
-                                path += "Business/" + item.Image;
+                                path += "Business/" + item.BusinessPictureImage;
                             }
                             <div class="col-sm-6 col-md-4 col-lg-4 card-grid">
                                 <div class="product-card">
@@ -117,14 +117,14 @@
                                             <i class="fas fa-tags"></i>
                                             <ol class="breadcrumb">
                                                 <li class="breadcrumb-item">
-                                                    <a>@item.BusinessAccountName </a>
+                                                    <a>@item.CategoryName </a>
                                                 </li>
                                             </ol>
                                         </div>
                                         <div class="product-title">
                                             <h5>
-                                                <a asp-controller="Employment" asp-action="Detail"
-                                                   asp-route-Id="@item.Id">@item.Title</a>
+                                                <a asp-controller="Business" asp-action="Detail"
+                                                   asp-route-Id="@item.Id">@item.AccountName</a>
                                             </h5>
                                             <ul class="product-location">
                                                 <li>
@@ -133,19 +133,11 @@
                                                         @item.ProvinceName - @item.CityName
                                                     </p>
                                                 </li>
-                                                <li>
-                                                    <i class="fas fa-money-bill"></i>
-
-
-                                                    <p>
-                                                        @item.Salary
-                                                    </p>
-                                                </li>
                                             </ul>
                                         </div>
                                         <div class="product-details">
                                             <div class="product-price">
-                                                <a asp-controller="Employment" asp-action="Detail"
+                                                <a asp-controller="Business" asp-action="Detail"
                                                    asp-route-Id="@item.Id" class="text-primary">مشاهده</a>
                                             </div>
                                             <ul class="product-widget">
@@ -165,20 +157,20 @@
 
                 </div>
 
-                <div class="row">
-                    <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-12">
                         @if (Model.Total > 1)
                         {
                             <div id="paginationSection"
                                  data-keyword="@Model.Filter!.search"
                                  data-pageSize="18"
                                  data-current-page="@Model.Filter.page"
-                                 data-total-pages="@Model.Total"
+                                 data-total-pages="@Model.Total" 
                                  data-parent="">
                             </div>
                         }
+                        </div>
                     </div>
-                </div>
             </div>
         </div>
     </div>

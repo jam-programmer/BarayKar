@@ -1,4 +1,4 @@
-﻿@model List<CategoryInfoViewModel>
+﻿@model CategoryViewModel
 
 
 <section class="section category-part">
@@ -9,12 +9,12 @@
                     <h2>
                         دسته بندی های برتر توسط <span>تبلیغ جذاب است </span>
                     </h2>
-                    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. .</p>
+                <p>@Model.CategoryText</p>   
                 </div>
             </div>
         </div>
         <div class="row">
-          @foreach(var item in Model){
+          @foreach(var item in Model.categories!){
                 string path = string.Empty;
 
                 if (item.Image == "defaultAvatar.jpg" || item.Image == "notFound.jpg")
@@ -29,7 +29,7 @@
                 <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
                 <div class="category-card">
                     <div class="category-head" style="background:url(@path) no-repeat center; background-size:cover">
-                            <a href="/Business/AllBusiness?category=@item.Id">
+                            <a href="/Business/Explore?category=@item.Id">
                             <h4>@item.Name </h4>
                             <p>(@item.Count)</p>
                         </a>
@@ -39,7 +39,7 @@
                             @foreach(var subItem in item.SubCategories!)
                             {
                                 <li>
-                                    <a href="/Business/AllBusiness?category=@item.Id">
+                                    <a href="/Business/Explore?category=@item.Id">
                                         <h6>@subItem.Name </h6>
                                         <p>(@subItem.Count)</p>
                                     </a>

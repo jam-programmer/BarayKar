@@ -36,15 +36,15 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="single-content">
-                    <h2>جزئیات نوار چپ</h2>
+                    <h2>@Model.AccountName</h2>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="index.html">صفحه اصلی</a>
+                            <a href="/">صفحه اصلی</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="rightbar-list.html">لیست نوار چپ</a>
+                            <a asp-controller="Business" asp-action="Explore">لیست کسب و کارها</a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">جزئیات نوار چپ</li>
+                        <li class="breadcrumb-item text-white" aria-current="page">@Model.AccountName</li>
                     </ol>
                 </div>
             </div>
@@ -151,7 +151,7 @@
                           @Model.About    </p>
                     </div>
                 </div>
-                <div class="ad-details-card">
+@*                 <div class="ad-details-card">
                     <div class="ad-details-title">
                         <h5>نظر (2)</h5>
                     </div>
@@ -271,7 +271,7 @@
                         </form>
                     </div>
                 </div>
-            </div>
+ *@            </div>
             <div class="col-lg-4">
               
                 <div class="ad-details-card">
@@ -376,7 +376,7 @@
                         <iframe src="@map"></iframe>
                     </div>
                 </div>
-                <div class="ad-details-card">
+              @*   <div class="ad-details-card">
                     <div class="ad-details-title">
                         <h5>نکات ایمنی</h5>
                     </div>
@@ -703,7 +703,7 @@
                         </div>
                         <i class="fas fa-long-arrow-alt-left bamdik slick-arrow" style="display: block;"></i>
                     </div>
-                </div>
+                </div> *@
             </div>
         </div>
     </div>

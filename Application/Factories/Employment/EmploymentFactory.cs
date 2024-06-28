@@ -9,29 +9,37 @@ using Application.Common.ViewModel.Home;
 using Application.Core;
 using Domain.Entities.Business;
 using Domain.Entities.Employment;
+using Domain.Entities.Resume;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Data;
+using System.Threading;
 
 namespace Application.Factories.Employment
 {
     public class EmploymentFactory : IEmploymentFactory
     {
+        private readonly IEfRepository<ResumeEntity> _resumeRepository;
+        private readonly IEfRepository<EmploymentRequestEntity> _employmentRequestRepository;
         private readonly IEfRepository<BusinessEntity> _businessRepository;
         private readonly IEfRepository<EmploymentEntity> _employmentRepository;
         private readonly ILogger<EmploymentFactory> _logger;
         private readonly IDapper _dapper;
         public EmploymentFactory
             (IEfRepository<EmploymentEntity> employmentRepository,
-            ILogger<EmploymentFactory> logger, IDapper dapper, IEfRepository<BusinessEntity> businessRepository)
+            ILogger<EmploymentFactory> logger,
+            IDapper dapper,
+            IEfRepository<BusinessEntity> businessRepository,
+            IEfRepository<EmploymentRequestEntity> employmentRequestRepository,
+            IEfRepository<ResumeEntity> resumeRepository)
         {
             _businessRepository = businessRepository;
-            _employmentRepository
-                = employmentRepository;
+            _employmentRepository= employmentRepository;
             _logger = logger;
-            _dapper
-                = dapper;
+            _dapper= dapper;
+            _employmentRequestRepository = employmentRequestRepository;
+            _resumeRepository = resumeRepository;
         }
 
         public async Task<List<BusinessFilterViewModel>> GetBusinessFilterAsync(CancellationToken cancellation = default)
@@ -179,6 +187,52 @@ namespace Application.Factories.Employment
 
 
             return Result.Success(employments);
+        }
+
+        public async Task<Result> SendRequestForEmploymentAsync
+            (Guid EmploymentId, Guid UserId, CancellationToken cancellation = default)
+        {
+            var resumeQuery = await _resumeRepository.GetByQueryAsync();
+            var resume = await resumeQuery.SingleOrDefaultAsync(s => s.UserId == UserId, cancellation);
+            if (resume == null)
+            {
+                return Result.Fail("رزومه خود را تکمیل نمائید و سپس اقدام کنید.");
+            }
+
+            var employmentQuery = await _employmentRepository.GetByQueryAsync();
+            var employmentPublisher =
+                await employmentQuery.AnyAsync(a => a.UserId == UserId 
+                && a.Id == EmploymentId, cancellation);
+            if(employmentPublisher is true)
+            {
+                return Result.Fail("این آگهی توسط شما منتشر شده است.");
+            }
+
+            var requestEmploymentQuery = await _employmentRequestRepository.GetByQueryAsync();
+
+            var existRequest = await requestEmploymentQuery.
+                AnyAsync(a => a.ResumeId == resume.Id && a.EmploymentId == EmploymentId, cancellation);
+            if(existRequest is true)
+            {
+                return Result.Fail("شما درخواست خود را قبلا ارسال کرده‌اید.");
+            }
+
+
+
+            EmploymentRequestEntity request = new();
+            request.EmploymentId = EmploymentId;
+            request.ResumeId = resume.Id;
+            request.Status = Domain.Enum.StatusEnum.Waiting;
+            try
+            {
+                await  _employmentRequestRepository.InsertAsync(request, cancellation);
+                return Result.Success();
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"خطای درخواست همکاری توسط کاربر رخ داده است. -{ex.Message}");
+            }
+            return Result.Fail(FailMessage.PublicInternalError);
         }
     }
 }

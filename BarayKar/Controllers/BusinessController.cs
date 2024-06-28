@@ -13,7 +13,7 @@ namespace BarayKar.Controllers
             var pageModel = await _businessFactory.GetBusinessDetailAsync(Id);
             return View(pageModel);
         }
-        public async Task<IActionResult> AllBusiness([FromQuery] BusinessFilter filter, CancellationToken cancellation = default)
+        public async Task<IActionResult> Explore([FromQuery] BusinessFilter filter, CancellationToken cancellation = default)
         {
             var pageModel = await _businessFactory.GetBusinessesAsync(filter, cancellation);
             return View(pageModel.Data);

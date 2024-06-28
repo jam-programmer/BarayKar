@@ -4,7 +4,7 @@
         <div class="header-content">
             <div class="header-left">
                 <ul class="header-widget">
-                    @if (User.Identity!.IsAuthenticated)
+                  @*   @if (User.Identity!.IsAuthenticated)
                     {
                         <li>
                             <button type="button" class="header-menu">
@@ -12,7 +12,7 @@
                             </button>
                         </li>
                     }
-
+ *@
                    
                   @await Component.InvokeAsync("LogoComponent")
                    

@@ -15,12 +15,12 @@
                     <h2>@Model.Title</h2>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="index.html">صفحه اصلی</a>
+                            <a href="/">صفحه اصلی</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="rightbar-list.html">لیست نوار چپ</a>
+                            <a asp-controller="Emplyment" asp-action="Explore">لیست آگهی‌های استخدام</a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">جزئیات نوار چپ</li>
+                        <li class="breadcrumb-item text-white" aria-current="page">@Model.Title</li>
                     </ol>
                 </div>
             </div>
@@ -113,7 +113,7 @@
                         </div>
             <ul>
               <li>
-                                <a class="btn btn-success text-white w-100" style="height: 48px;padding-top:12px;">
+                                <a onclick="SendEmploymentRequest('@Model.Id')" class="btn btn-success text-white w-100" style="height: 48px;padding-top:12px;">
                                     <i class="fa-solid fa-hand"></i>
                   <span>ارسال درخواست همکاری </span>
                 </a>

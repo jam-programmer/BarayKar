@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BusinessViewModel>
+﻿@model LastBusinessViewModel
 
 
 <section class="section recomend-part">
@@ -9,8 +9,7 @@
                     <h2>
                         جدیدترین  <span>کسب و کارها   </span>
                     </h2>
-                    @*  <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. .</p>
-                    *@
+                     <p>@Model.BusinessText</p> 
                 </div>
             </div>
         </div>
@@ -19,7 +18,7 @@
                 <div class="recomend-slider">
 
 
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.businesses!)
                     {
 
                         
@@ -105,7 +104,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="center-50">
-                    <a asp-controller="Business" asp-action="AllBusiness" class="btn btn-inline">
+                    <a asp-controller="Business" asp-action="Explore" class="btn btn-inline">
                         <i class="fas fa-eye"></i>
                         <span>مشاهده همه کسب و کارها</span>
                     </a>

@@ -16,6 +16,11 @@ namespace Application.Cqrs.Setting
     public class UpdateSettingCommand : IRequest<Result>
     {
 
+        public string? Address { set; get; }
+        public string? CategoryText { set; get; }
+        public string? BusinessText { set; get; }
+        public string? EmploymentText { set; get; }
+        public string? ProvinceText { set; get; }
         public string? TitleSite { set; get; }
         public IFormFile LogoFile { set; get; }
         public string? Logo { set; get; }
