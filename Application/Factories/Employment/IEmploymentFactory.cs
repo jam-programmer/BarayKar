@@ -14,5 +14,10 @@ namespace Application.Factories.Employment
         Task<List<BusinessFilterViewModel>> GetBusinessFilterAsync(CancellationToken cancellation = default);
         Task<Result> SendRequestForEmploymentAsync
             (Guid EmploymentId, Guid UserId, CancellationToken cancellation = default);
+
+
+
+
+
     }
 }

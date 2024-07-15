@@ -1,7 +1,7 @@
-﻿@model Application.Common.Model.PaginatedList<UserEmploymentAdvertisementViewModel>
+﻿@model Application.Common.Model.PaginatedList<RequestEmploymentViewModel>
 @{
-    ViewData["Title"] = "آگهی‌های من";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "درخواست‌های استخدام";
 }
 
 
@@ -9,10 +9,7 @@
     <link rel="stylesheet" href="~/main/css/custom/ad-post.css">
     <link rel="stylesheet" href="~/main/css/custom/profile.css">
 }
-@section Script {
 
-    <partial name="_ValidationScriptsPartial" />
-}
 
 <section class="single-banner">
     <div class="container">
@@ -24,7 +21,7 @@
                         <li class="breadcrumb-item">
                             <a href="/">صفحه اصلی</a>
                         </li>
-                        <li class="breadcrumb-item text-white" aria-current="page">آگهی‌های من</li>
+                        <li class="breadcrumb-item text-white" aria-current="page">درخواست‌های استخدام</li>
                     </ol>
                 </div>
             </div>
@@ -53,22 +50,20 @@
 
                 <div class="adpost-card">
                     <div class="adpost-title">
-                        <h3> آگهی‌های من </h3>
-                    </div> 
-                    <form asp-action="UserEmploymentAdvertisements" asp-area="User" asp-controller="Dashboard" method="get">
+                        <h3>درخواست‌های استخدام </h3>
+                    </div>
+                    <form asp-action="EmploymentRequests" asp-area="User" asp-controller="Dashboard" method="get">
                         <div class="row d-flex justify-content-start mb-3">
-                            <div class="col-md-3">
-                                <a asp-controller="Dashboard" asp-action="AddEmployment" asp-area="User" class="btn btn-sm btn-success text-white">ایجاد آگهی جدید</a>
-
-
-                            </div>
-
+                            <input type="hidden" name="EmploymentId" value="@ViewBag.EmploymentId" />
                             <div class="col-md-3">
                                 <input type="text" name="Keyword" class="form-control form-control-sm" style="height:40px !important" />
                             </div>
                             <div class="col-md-3">
                                 <button type="submit" class="btn btn-sm btn-primary" style="padding:8px 12px !important;"><i class="fa-solid fa-magnifying-glass text-white"></i></button>
-                                <a asp-action="UserEmploymentAdvertisements" asp-area="User" asp-controller="Dashboard" class="btn btn-sm btn-success" style="padding:8px 12px !important;"><i class="fa-solid fa-rotate-right text-white"></i></a>
+                                <a asp-action="EmploymentRequests" 
+                                asp-area="User" asp-controller="Dashboard"
+                                   asp-route-EmploymentId="@ViewBag.EmploymentId"
+                                class="btn btn-sm btn-success" style="padding:8px 12px !important;"><i class="fa-solid fa-rotate-right text-white"></i></a>
 
 
                             </div>
@@ -79,32 +74,44 @@
                         <thead>
                             <tr>
 
-                                <th scope="col">نام</th>
-                                <th scope="col">شناسه</th>
-                                <th scope="col">کسب و کار</th>
+                                <th scope="col">نام و نام خانوادگی</th>
+                                <th scope="col">عنوان شغلی</th>
+                                <th scope="col">وضعیت</th>
                                 <th scope="col">عملیات</th>
                             </tr>
                         </thead>
                         <tbody>
-
                             @foreach (var item in Model.List!)
                             {
-                                <tr>
-                                    <td>@item.Title</td>
-                                    <td>@item.Code</td>
-                                    <td>@item.BusinessAccountName</td>
-                                    <td>
+                            <td>@item.ResumeUserFirstName @item.ResumeUserLastName</td>
+                            <td>@item.ResumeTitle</td>
 
-                                        <a asp-area="User" asp-controller="Dashboard" asp-action="EmploymentRequests" asp-route-EmploymentId="@item.Id"><i class="fa-solid fa-folder-open mx-1 text-primary"></i></a>
-                                        <a asp-area="User" asp-controller="Dashboard" asp-action="EditEmployment" asp-route-Id="@item.Id"><i class="mx-1 fa-solid fa-pen-to-square text-warning"></i></a>
-                                        <a><i class="mx-1 fa-solid fa-trash text-danger"></i></a>
-                                            
+
+                                <td id="Status_@item.Id">
+                                    @switch (item.Status)
+                                    {
+                                        case Status.Rejected:
+                                        <span class="text-danger">رد شده</span>
+                                            break;
+                                             case Status.Accepted:
+                                        <span class="text-success">قبول شده</span>
+                                            break;
+                                        case Status.Waiting:
+                                        <span class="text-warning">در انتظار</span>
+                                            break;
+                                    }
                                     </td>
-                                </tr>
+
+                            <td>
+                                <a onclick="ChangeRequestStatus('@item.Id')" class="p-1 btn btn-sm btn-info text-white">تغییر وضعیت</a>
+                                <a class="p-1 btn btn-sm btn-primary text-white">مشاهده رزومه</a>
+                            </td>
                             }
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+    </div>
 </section>
+

@@ -29,6 +29,7 @@ namespace Application.Factories.User
         private readonly IEfRepository<BusinessTimeEntity> _timeRepository;
         private readonly IEfRepository<BusinessEntity> _businessRepository;
         private readonly IEfRepository<EmploymentEntity> _employmentRepository;
+        private readonly IEfRepository<EmploymentRequestEntity> _employmentRequestRepsitory;
         private readonly ILogger<UserFactory> _logger;
         private readonly IContext _context;
         private readonly UserManager<UserEntity> _userManager;
@@ -42,7 +43,8 @@ namespace Application.Factories.User
             IEfRepository<EmploymentEntity> employmentRepository,
             IEfRepository<ResumeEntity> resumeRepository,
              IEfRepository<EducationalRecordEntity> educationRepository,
-            IEfRepository<WorkExperienceEntity> experienceRepository
+            IEfRepository<WorkExperienceEntity> experienceRepository,
+            IEfRepository<EmploymentRequestEntity> employmentRequestRepsitory
             )
         {
             _logger = logger;
@@ -56,6 +58,7 @@ namespace Application.Factories.User
             _resumeRepository = resumeRepository;
             _educationRepository = educationRepository;
             _experienceRepository = experienceRepository;
+            _employmentRequestRepsitory = employmentRequestRepsitory;
         }
 
         private delegate Task<Result> ChangeResumeEvent(string json, Guid UserId, CancellationToken cancellation);
@@ -649,12 +652,12 @@ namespace Application.Factories.User
             }
             if (!string.IsNullOrEmpty(resume.Skills))
             {
-                
+
                 char separator = '-';
 
                 string[] skillArray = resume.Skills.Split(separator); // تقسیم رشته بر اساس خط تیره
 
-               record.UserSkills = new List<string>(skillArray); // تبدیل آرایه به لیست
+                record.UserSkills = new List<string>(skillArray); // تبدیل آرایه به لیست
             }
             return record;
         }
@@ -803,6 +806,68 @@ namespace Application.Factories.User
             }
             return Result.Fail();
 
+        }
+
+        public async Task<Result> GetRequestEmploymentByEmploymentIdAsync
+            (Pagination pagination,Guid EmploymentId, CancellationToken cancellation = default)
+        {
+            try
+            {
+                var query = await _employmentRequestRepsitory.GetByQueryAsync();
+                query = query.Include(i => i.Resume).ThenInclude(t => t.User)
+                  .Where(w => w.EmploymentId == EmploymentId);
+                int count;
+                PaginatedList<RequestEmploymentViewModel> model = new();
+                if (string.IsNullOrEmpty(pagination!.keyword))
+                {
+                    count = query.Count().PageCount(pagination!.pageSize);
+                    model = await query
+                   .MappingedAsync<EmploymentRequestEntity, RequestEmploymentViewModel>
+                    (pagination!.curentPage,
+                   pagination!.pageSize, count);
+                }
+                else
+                {
+                    query = query.Where(w => w.Resume!.User!.FirstName.Contains(pagination!.keyword) ||
+                    w.Resume.User.LastName.Contains(pagination!.keyword));
+                    count = query.Count(
+                        s => s.Resume!.User!.FirstName.Contains(pagination!.keyword) ||
+                        s.Resume.User.LastName.Contains(pagination!.keyword)
+                        ).PageCount(pagination!.pageSize);
+                    model = await query
+                   .MappingedAsync<EmploymentRequestEntity, RequestEmploymentViewModel>
+                    (pagination!.curentPage,
+                    pagination!.pageSize, count);
+                }
+                return Result.Success(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"لیست درخواست های آگهی استخدام واکشی نشد - {ex.Message}");
+                return Result.Fail();
+            }
+        }
+
+        public async Task ChangeEmploymentRequestAsync
+            (UpdateEmploymentRequestRecord record, CancellationToken cancellation = default)
+        {
+            var model = await _employmentRequestRepsitory.GetByIdAsync(record.Id, cancellation);
+            model.Comment = record.Comment;
+            switch (record.StatusId)
+            {
+                case "0":
+                    model.Status = StatusEnum.Accepted;
+                    break;
+                case "1":
+                    model.Status = StatusEnum.Rejected;
+                    break;
+                case "2":
+                    model.Status = StatusEnum.Waiting;
+                    break;
+            }
+
+
+           await _employmentRequestRepsitory.UpdateAsync(model);
         }
     }
 }

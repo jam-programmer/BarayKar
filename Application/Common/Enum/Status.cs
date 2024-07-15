@@ -5,10 +5,10 @@ namespace Application.Common.Enum
     public enum Status
     {
         [Display(Name = "پذیرفتن")]
-        Accepted,
+        Accepted = 0,
         [Display(Name = "عدم پذیرش")]
-        Rejected,
+        Rejected = 1,
         [Display(Name = "در انتظار بازبینی")]
-        Waiting
+        Waiting = 2
     }
 }

@@ -127,12 +127,6 @@ namespace BarayKar.Areas.User.Controllers
             }, cancellation);
             return View(pageModel);
         }
-
-
-
-
-
-
         [HttpGet]
         public async Task<IActionResult> AddEmployment()
         {
@@ -167,9 +161,6 @@ namespace BarayKar.Areas.User.Controllers
             await Province();
             return View(record);
         }
-
-
-
         [HttpGet]
         public async Task<IActionResult> EditEmployment(Guid Id,CancellationToken cancellation)
         {
@@ -210,8 +201,31 @@ namespace BarayKar.Areas.User.Controllers
             return View(record);
         }
 
-
-
+        [HttpGet]
+        public async Task<IActionResult> EmploymentRequests(
+            [FromQuery] Pagination pagination,Guid EmploymentId,CancellationToken cancellation = default)
+        {
+            var pageModel =await _userFactory.GetRequestEmploymentByEmploymentIdAsync(pagination,
+                EmploymentId, cancellation);
+            if (pageModel.IsSuccess is true)
+            {
+                ViewBag.EmploymentId = EmploymentId;
+                return View(pageModel.Data);
+            }
+            return Redirect("/404");
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         [HttpGet]
         public async Task<IActionResult> MyResume()
         {
@@ -230,7 +244,6 @@ namespace BarayKar.Areas.User.Controllers
            ViewBag.Alert=result.Message;
             return View(record);
         }
-
         public async Task Businesses(string? selected = null)
         {
             var businesses = await _mediator.Send(new GetBusinessItemsQuery());
@@ -244,11 +257,6 @@ namespace BarayKar.Areas.User.Controllers
 
             }
         }
-
-
-
-
-
         public async Task Categories(string? selected = null)
         {
             var categories = await _mediator.Send(new GetCategoryItemsQuery());
@@ -296,12 +304,20 @@ namespace BarayKar.Areas.User.Controllers
             }, cancellation);
             return Ok(cities);
         }
-
-
-
-        public Guid UserId()
+       public Guid UserId()
         {
-            return Guid.Parse(User.FindFirstValue("Id")!);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            return Guid.Parse(userId!);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeRequestStatus
+            ([FromBody]UpdateEmploymentRequestRecord record,CancellationToken cancellation=default)
+        {
+            await _userFactory.ChangeEmploymentRequestAsync(record, cancellation);
+            return Ok();
         }
     }
 }

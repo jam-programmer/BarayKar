@@ -49,5 +49,12 @@ namespace Application.Factories.User
             CancellationToken cancellation = default);
 
         Task<Result> UpdateMyResumeAsync(MyResumeRecord record, CancellationToken cancellation);
+
+
+        Task<Result> GetRequestEmploymentByEmploymentIdAsync(Pagination pagination,Guid EmploymentId
+    , CancellationToken cancellation = default);
+
+        Task ChangeEmploymentRequestAsync(UpdateEmploymentRequestRecord record,
+            CancellationToken cancellation = default);
     }
 }

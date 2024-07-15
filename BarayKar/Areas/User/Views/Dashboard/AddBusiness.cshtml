@@ -257,8 +257,8 @@
     <div class="container">
         <div class="row">
 
-            @await Component.InvokeAsync("UserInformationComponent", Guid.Parse(User.FindFirstValue("Id")!))
-            @await Component.InvokeAsync("UserStatisticalInformationComponent", Guid.Parse(User.FindFirstValue("Id")!))
+            @await Component.InvokeAsync("UserInformationComponent", Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!))
+            @await Component.InvokeAsync("UserStatisticalInformationComponent", Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!))
 
            
         </div>

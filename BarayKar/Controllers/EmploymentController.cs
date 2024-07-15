@@ -37,13 +37,16 @@ namespace BarayKar.Controllers
                 result.Message!.Add("برای ثبت درخواست همکاری وارد حساب کاربری خود شوید.");
                 return Ok(result);
             }
-            var resultRequest = await _employmentFactory.
-                SendRequestForEmploymentAsync(Id, UserId());
+
+                var resultRequest = await _employmentFactory.SendRequestForEmploymentAsync(Id, UserId());
+           
             return Ok(resultRequest);
         }
         public Guid UserId()
         {
-            return Guid.Parse(User.FindFirstValue("Id")!);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+           
+            return Guid.Parse(userId!);
         }
     }
 }

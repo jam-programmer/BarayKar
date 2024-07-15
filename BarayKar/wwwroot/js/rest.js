@@ -80,10 +80,13 @@ rest.postAsync = async (url, params, body, callback = null) => {
     }
     requestOptions.headers = headers;
     var request = await fetch(url, requestOptions);
+
+    if (callback != null)
+        return callback(true, response);
+
     if (request.status != 200)
         return callback(false, '');
     var response = await request.json();
-    if (callback != null)
-        return callback(true, response);
+    
     return callback(request.ok, response);
 }
