@@ -144,11 +144,46 @@ function ChangeRequestStatus(id) {
             Comment: comment.value,
             Id: id
         }
-        console.log(body);
-        rest.postAsync("/User/Dashboard/ChangeRequestStatus", null, body, null); 
-     
-    }
+        rest.postAsync("/User/Dashboard/ChangeRequestStatus", null, body, function (isSuccess, response) {
+            if (isSuccess) {
+                let TdId = "Status_" + id;
+                var statusTd = document.getElementById(TdId); statusTd.innerHTML = "";
+                switch (status.value) {
+                    case "0":
+                        statusTd.innerHTML = '<span class="text-success">قبول شده</span>';
+                        break;
+                    case "1":
+                        statusTd.innerHTML = '<span class="text-danger">رد شده</span>';
+                        break;
+                    case "2":
+                        statusTd.innerHTML = ' <span class="text-warning">در انتظار</span>';
+                        break;
+                }
+                var modal = document.getElementById("ChangeRequestModal");
+                modal.remove();
+            }
+        });
+        //rest.postAsync("/User/Dashboard/ChangeRequestStatus", null, body, function (isSuccess, response) {
+        //    if (response.isSuccess) {
+        //        let TdId = "Status_" + id;
+        //        var statusTd = document.getElementById(TdId); statusTd.innerHTML = "";
+        //        switch (status.value) {
+        //            case "0":
+        //                statusTd.innerHTML = '<span class="text-success">قبول شده</span>';
+        //                break;
+        //            case "1":
+        //                statusTd.innerHTML = '<span class="text-danger">رد شده</span>';
+        //                break;
+        //            case "2":
+        //                statusTd.innerHTML = ' <span class="text-warning">در انتظار</span>';
+        //                break;
+        //        }
+        //        var modal = document.getElementById("ChangeRequestModal");
+        //        modal.remove();
+        //    }
+        //}); 
 
+    };
     modalFooter.appendChild(closeButtonModal);
     modalFooter.appendChild(saveButton);
 

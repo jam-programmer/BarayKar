@@ -316,8 +316,12 @@ namespace BarayKar.Areas.User.Controllers
         public async Task<IActionResult> ChangeRequestStatus
             ([FromBody]UpdateEmploymentRequestRecord record,CancellationToken cancellation=default)
         {
-            await _userFactory.ChangeEmploymentRequestAsync(record, cancellation);
-            return Ok();
+          var result= await _userFactory.ChangeEmploymentRequestStatusAsync(record, cancellation);
+            if(result.IsSuccess is false)
+            {
+
+            }
+            return Ok(result.IsSuccess);
         }
     }
 }

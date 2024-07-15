@@ -848,26 +848,35 @@ namespace Application.Factories.User
             }
         }
 
-        public async Task ChangeEmploymentRequestAsync
+        public async Task<Result> ChangeEmploymentRequestStatusAsync
             (UpdateEmploymentRequestRecord record, CancellationToken cancellation = default)
         {
-            var model = await _employmentRequestRepsitory.GetByIdAsync(record.Id, cancellation);
-            model.Comment = record.Comment;
-            switch (record.StatusId)
+            try
             {
-                case "0":
-                    model.Status = StatusEnum.Accepted;
-                    break;
-                case "1":
-                    model.Status = StatusEnum.Rejected;
-                    break;
-                case "2":
-                    model.Status = StatusEnum.Waiting;
-                    break;
+                var model = await _employmentRequestRepsitory.GetByIdAsync(record.Id, cancellation);
+                model.Comment = record.Comment;
+                switch (record.Status)
+                {
+                    case "0":
+                        model.Status = StatusEnum.Accepted;
+                        break;
+                    case "1":
+                        model.Status = StatusEnum.Rejected;
+                        break;
+                    case "2":
+                        model.Status = StatusEnum.Waiting;
+                        break;
+                }
+
+
+                await _employmentRequestRepsitory.UpdateAsync(model);
             }
-
-
-           await _employmentRequestRepsitory.UpdateAsync(model);
+            catch(Exception ex)
+            {
+                _logger.LogError($"هنگام تغییر وضعیت درخواست استخدام خطایی رخ داده است. - {ex.Message}");
+                return Result.Fail();
+            }
+            return Result.Success();
         }
     }
 }

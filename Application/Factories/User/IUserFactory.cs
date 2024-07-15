@@ -54,7 +54,7 @@ namespace Application.Factories.User
         Task<Result> GetRequestEmploymentByEmploymentIdAsync(Pagination pagination,Guid EmploymentId
     , CancellationToken cancellation = default);
 
-        Task ChangeEmploymentRequestAsync(UpdateEmploymentRequestRecord record,
+        Task<Result> ChangeEmploymentRequestStatusAsync(UpdateEmploymentRequestRecord record,
             CancellationToken cancellation = default);
     }
 }

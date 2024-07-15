@@ -7,7 +7,7 @@ namespace Application.Common.Record.UserPanel
         public string? Comment { set; get; }
         public Guid Id { set; get; }
 
-        public string StatusId { set; get; }
+        public string? Status { set; get; }
         
     }
 }
