@@ -5,12 +5,14 @@ using Application.Cqrs.City;
 using Application.Cqrs.Province;
 using BarayKar.Areas.Admin.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace BarayKar.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class CityController(IMediator mediator) : Controller
     {
         private readonly IMediator _mediator = mediator;

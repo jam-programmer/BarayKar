@@ -18,12 +18,12 @@
         public string? MainSubText { set; get; }
         public string? AboutSectionTitle { set; get; }
         public string? AboutSectionDescription { set; get; }
-
         public string? Address { set; get; }
         public string? CategoryText { set; get; }
         public string? BusinessText { set; get; }
         public string? EmploymentText { set; get; }
         public string? ProvinceText { set; get; }
-
+        public string? About { set; get; }
+        public string? Law { set; get; }
     }
 }

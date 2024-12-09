@@ -56,5 +56,10 @@ namespace Application.Factories.User
 
         Task<Result> ChangeEmploymentRequestStatusAsync(UpdateEmploymentRequestRecord record,
             CancellationToken cancellation = default);
+
+
+        Task<List<EmploymentRequestAlertViewModel>> 
+            GetEmploymentRequestAlertAsync(Guid UserId,CancellationToken cancellation=default);
+        Task<Result> GetResumeForPdfGeneratorAsync(Guid Id, CancellationToken cancellation = default);
     }
 }

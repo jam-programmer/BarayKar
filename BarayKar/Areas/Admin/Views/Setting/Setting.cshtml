@@ -1,4 +1,4 @@
-﻿@model Application.Cqrs.Setting.UpdateSettingCommand
+﻿ @model Application.Cqrs.Setting.UpdateSettingCommand
 @{
     ViewData["Title"] = "تنظیمات";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
@@ -240,13 +240,29 @@
                                           </textarea>
                                 </div>
                             </div>
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">درباره ما</label>
+                                    <textarea asp-for="About" type="text" class="form-control" rows="6"
+                                              placeholder="درباره ما">
+                                          </textarea>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div>
+                                    <label class="form-label">قوانین سایت</label>
+                                    <textarea asp-for="Law" type="text" class="form-control" rows="6"
+                                              placeholder="قوانین سایت">
+                                          </textarea>
+                                </div>
+                            </div>
+
 
                         </div>
                     </div>
                     <div class="card-footer">
                         <button type="submit" class="btn btn-sm rounded-pill btn-success">ثبت</button>
-                        <a asp-area="Admin" asp-controller="Province" asp-action="Index" class="btn btn-sm rounded-pill btn-warning text-white">بازگشت</a>
-                    </div>
+                           </div>
                 </form>
             </div>
         </div>

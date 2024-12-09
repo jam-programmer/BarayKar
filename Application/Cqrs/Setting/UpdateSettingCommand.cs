@@ -38,6 +38,8 @@ namespace Application.Cqrs.Setting
         public string? MainSubText { set; get; }
         public string? AboutSectionTitle { set; get; }
         public string? AboutSectionDescription { set; get; }
+        public string? About { set; get; }
+        public string? Law { set; get; }
     }
 
     public class UpdateSettingCommandHandler
@@ -60,9 +62,14 @@ namespace Application.Cqrs.Setting
                     request.Logo = setting.Logo;
                 }
                 await _repository.UpdateAsync(setting);
+
+
                 var cacheValue = await _cache.GetAsync(CacheKey.SettinKey);
+
                 var serializedSetting = JsonSerializer.Serialize(request);
+
                 byte[] settingEncoded = Encoding.UTF8.GetBytes(serializedSetting);
+
                 if (cacheValue == null)
                 {
                     await _cache.SetAsync(CacheKey.SettinKey, settingEncoded,

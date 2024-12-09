@@ -21,16 +21,6 @@ namespace Infrastructure.Configuration
 
             });
 
-
-
-
-
-
-
-
-
-
-
             service.AddScoped(typeof(IEfRepository<>), typeof(EfRepository<>));
             service.AddScoped<IContext, ContextRepository>();
             service.AddScoped<IDapper, DapperRepository>();

@@ -1,4 +1,4 @@
-let rest = {};
+﻿let rest = {};
 
 rest.get = (url, params, callback = null) => {
     try {
@@ -69,24 +69,40 @@ rest.post = (url, body, callback = null) => {
 rest.postAsync = async (url, params, body, callback = null) => {
     var headers = new Headers();
     headers.append("Content-Type", "application/json");
+
     var requestOptions = {
         method: 'POST',
+        headers: headers,
         redirect: 'follow'
     };
-    if (params)
-        url = url + "?" + new URLSearchParams(params)
+
+    // اضافه کردن پارامترها به URL در صورت وجود آنها  
+    if (params) {
+        url = url + "?" + new URLSearchParams(params);
+    }
+
+    // اضافه کردن بدنه به درخواست در صورت وجود آن  
     if (body) {
         requestOptions.body = JSON.stringify(body);
     }
-    requestOptions.headers = headers;
-    var request = await fetch(url, requestOptions);
 
-    if (callback != null)
-        return callback(true, response);
+    try {
+        var request = await fetch(url, requestOptions);
 
-    if (request.status != 200)
-        return callback(false, '');
-    var response = await request.json();
-    
-    return callback(request.ok, response);
+        // بررسی وضعیت پاسخ  
+        var response = await request.json();
+
+        // استفاده از callback برای نتایج  
+        if (callback) {
+            return callback(request.ok, request.ok ? response : request.statusText);
+        }
+
+        return request.ok ? response : null;
+    } catch (error) {
+        // در صورتی که خطایی پیش بیاید  
+        if (callback) {
+            return callback(false, error.message);
+        }
+        throw error; // در غیر این صورت خطا را پرتاب کنید  
+    }
 }

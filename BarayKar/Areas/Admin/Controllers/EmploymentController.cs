@@ -6,12 +6,14 @@ using Application.Cqrs.Identity.User;
 using Application.Cqrs.Province;
 using BarayKar.Areas.Admin.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BarayKar.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class EmploymentController(IMediator mediator) : Controller
     {
         private readonly IMediator _mediator = mediator;

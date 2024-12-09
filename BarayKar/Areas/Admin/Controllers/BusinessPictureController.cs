@@ -2,12 +2,13 @@
 using Application.Cqrs.BusinessPicture;
 using BarayKar.Areas.Admin.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BarayKar.Areas.Admin.Controllers
 {
     [Area("Admin")]
-
+    [Authorize(Roles = "Admin")]
     public class BusinessPictureController(IMediator mediator) : Controller
     {
         private readonly IMediator _mediator = mediator;

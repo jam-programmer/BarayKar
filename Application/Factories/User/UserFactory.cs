@@ -734,7 +734,8 @@ namespace Application.Factories.User
         /// <returns></returns>
         private async Task<Result> ChangeExperiences(string JsonSerialized, Guid Id, CancellationToken cancellation)
         {
-            var experiences = await _experienceRepository.GetListAsync(cancellation);
+            var quey = await _experienceRepository.GetByQueryAsync();
+            var experiences = await quey.Where(w=>w.ResumeId==Id).ToListAsync(cancellation);
             try
             {
                 if (experiences != null)
@@ -753,7 +754,7 @@ namespace Application.Factories.User
                     FromDate = s.FromDate,
                     IsWorking = s.IsActive,
                     ToDate = s.ToDate,
-                    ResumeId = Id
+                    ResumeId = Id,Title = s.Title
                 }).ToList();
 
                 await _experienceRepository.InsertListAsync(model!, cancellation);
@@ -776,7 +777,8 @@ namespace Application.Factories.User
         /// <returns></returns>
         private async Task<Result> ChangeEducations(string JsonSerialized, Guid Id, CancellationToken cancellation)
         {
-            var educations = await _educationRepository.GetListAsync(cancellation);
+            var query = await _educationRepository.GetByQueryAsync();
+            var educations = await query.Where(w=>w.ResumeId==Id).ToListAsync(cancellation);
             try
             {
                 if (educations != null)
@@ -795,7 +797,8 @@ namespace Application.Factories.User
                     FromDate = s.FromDate,
                     IsStudying = s.IsActive,
                     ToDate = s.ToDate,
-                    ResumeId = Id
+                    ResumeId = Id,
+                    Title = s.Title
                 }).ToList();
                 await _educationRepository.InsertListAsync(model!, cancellation);
                 return Result.Success();
@@ -877,6 +880,43 @@ namespace Application.Factories.User
                 return Result.Fail();
             }
             return Result.Success();
+        }
+
+        public async Task<List<EmploymentRequestAlertViewModel>> 
+            GetEmploymentRequestAlertAsync(Guid UserId, CancellationToken cancellation = default)
+        {
+            var query = await _employmentRequestRepsitory.GetByQueryAsync();
+            var list=await query
+                .Include(i=>i.Employment)
+                .Include(i=>i.Resume)
+                .Where(w=>w.Resume!.UserId == UserId).ToListAsync();
+            List<EmploymentRequestAlertViewModel> alerts = new();
+            var config = new TypeAdapterConfig();
+            config.NewConfig<EmploymentRequestEntity, EmploymentRequestAlertViewModel>()
+                .Map(a=>a.Id,b=>b.Id)
+                .Map(a=>a.Comment,b=>b.Comment)
+                .Map(a=>a.EmploymentTitle,b=>b.Employment!.Title)
+                .Map(a=>a.Status,b=>b.Status.MapStatus()).Compile();
+            alerts=list.Adapt<List<EmploymentRequestAlertViewModel>>(config);  
+            return alerts;
+        }
+
+        public async Task<Result> GetResumeForPdfGeneratorAsync
+            (Guid Id, CancellationToken cancellation = default)
+        {
+           var query=await _resumeRepository.GetByQueryAsync();
+            var model=await query
+                .Include(i=>i.Educationals)
+                .Include(i=>i.Experiences)
+                .Include(i=>i.User)
+                .SingleOrDefaultAsync(s=>s.Id==Id,cancellation);
+            if (model == null)
+            {
+                return Result.Fail("رزومه ای برای کاربر وجود ندارد.");
+            }
+            RequestResumeViewModel resume = new();
+            resume = model!.Adapt<RequestResumeViewModel>();
+            return Result.Success(resume);
         }
     }
 }

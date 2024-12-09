@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "تماس با ما";
+}
+@section Style {
+    <link rel="stylesheet" href="~/main/css/custom/contact.css">
+}
+@section Script {
+}
+<section class="single-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="single-content">
+                    <h2>تماس با ما</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/">صفحه اصلی</a>
+                        </li>
+
+                        <li class="breadcrumb-item text-white" aria-current="page">تماس با ما</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="contact-part">
+    <div class="container">
+        <div class="row">
+            @await Component.InvokeAsync("ContactUsInformationComponent")
+        </div>
+   
+        <div class="row justify-content-lg-center justify-content-xl-center">
+            <div class="col-lg-8 justify-content-center">
+                <div class="contact-form">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <input type="text" id="fullName" class="form-control" placeholder="نام شما">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <input type="text" id="phoneNumber"  class="form-control" placeholder="شماره تماس شما">
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" id="subject"  class="form-control" placeholder="موضوع شما">
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <textarea class="form-control" id="message" placeholder="پیام شما"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-btn">
+                                <a onclick="SendContactMessage()" class="btn btn-inline text-white">
+                                    <i class="fas fa-paper-plane"></i>
+                                    <span>ارسال پیام</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

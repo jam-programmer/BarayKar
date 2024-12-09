@@ -1,5 +1,4 @@
-﻿
-using Domain.Entities.Employment;
+﻿using Domain.Entities.Employment;
 using Domain.Entities.System.Identity;
 using Domain.Enum;
 

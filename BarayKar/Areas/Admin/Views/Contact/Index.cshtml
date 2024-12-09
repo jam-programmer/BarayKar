@@ -1,0 +1,166 @@
+﻿   @model Application.Common.Model.PaginatedList<Application.Cqrs.Contact.ContactViewModel>
+
+@{
+    ViewData["Title"] = "پیام‌های ارتباطی";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Script {
+    <script src="~/assets/js/pagination.js"></script>
+    <script src="~/assets/js/alert.js"></script>
+
+    <script>
+        function createModal(text) {
+            // ایجاد عناصر
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.id = 'exampleModal';
+            modal.style.display = "block";
+            modal.tabIndex = -1;
+            modal.setAttribute('aria-labelledby', 'exampleModalLabel');
+            modal.setAttribute('aria-hidden', 'true');
+
+            const modalDialog = document.createElement('div');
+            modalDialog.className = 'modal-dialog';
+
+            const modalContent = document.createElement('div');
+            modalContent.className = 'modal-content';
+
+            const modalHeader = document.createElement('div');
+            modalHeader.className = 'modal-header';
+
+            const modalTitle = document.createElement('h5');
+            modalTitle.className = 'modal-title';
+            modalTitle.id = 'exampleModalLabel';
+            modalTitle.textContent = 'مشاهده پیام';
+
+
+            const modalBody = document.createElement('div');
+            modalBody.className = 'modal-body';
+            modalBody.textContent = text; // محتویات مودال
+
+            const modalFooter = document.createElement('div');
+            modalFooter.className = 'modal-footer';
+
+            const closeFooterButton = document.createElement('button');
+            closeFooterButton.type = 'button';
+            closeFooterButton.className = 'btn btn-secondary';
+            closeFooterButton.setAttribute('data-dismiss', 'modal');
+            closeFooterButton.textContent = 'بستن';
+            closeFooterButton.onclick = function () {
+                var modal = document.getElementById("exampleModal");
+                modal.remove();
+            };
+
+
+            // ساختاردهی عناصر
+            modalHeader.appendChild(modalTitle);
+            modalContent.appendChild(modalHeader);
+            modalContent.appendChild(modalBody);
+            modalFooter.appendChild(closeFooterButton);
+            modalContent.appendChild(modalFooter);
+            modalDialog.appendChild(modalContent);
+            modal.appendChild(modalDialog);
+
+            // اضافه کردن مودال به بدنه
+            document.body.appendChild(modal);
+        }
+
+
+    </script>
+
+
+}
+<div class="container">
+    <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="lh-1-85 breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">پیشخوان</a>
+                </li>
+
+                <li class="breadcrumb-item active"> پیام‌های ارتباطی </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="card">
+            <div class="card-header ">
+                <h5 class="heading-color"> پیام‌های ارتباطی</h5>
+
+                <form asp-controller="Contact" asp-area="Admin" asp-action="Index" method="get"
+                      class="row mt-3 shadow-lg p-3 mb-3 bg-white rounded p-3"
+                      style="background-color:#ececec !important">
+
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                        <input name="keyword" type="search" class="form-control form-control-sm" placeholder="جستجو ..."
+                               aria-controls="DataTables_Table_3">
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                        <button type="submit" class="btn btn-sm btn-info text-white"><i class="bx bx-search"></i></button>
+                        <a asp-controller="Contact" asp-area="Admin" asp-action="Index" class="btn btn-sm btn-warning text-white"><i class="bx bx-refresh"></i></a>
+                    </div>
+                    <input type="hidden" name="CurentPage" />
+                    <input type="hidden" name="Keyword" />
+                </form>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive text-nowrap">
+                    <table class="table">
+                        <thead>
+                            <tr>
+
+                                <th>عنوان</th>
+                                <th>فرستنده</th>
+                                <th>شماره تماس </th>
+                                <th>عملیات</th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+
+                            @foreach (var item in Model.List!)
+                            {
+                                <tr id="Item_@item.Id">
+                                    <td>
+                                        @item.Subject
+                                    </td>
+                                    <td>
+                                        @item.FullName
+                                    </td>
+
+                                    <td>
+                                        @item.PhoneNumber
+                                    </td>
+
+
+                                    <td>
+                                        <a onclick="createModal('@item.Message')"
+                                           class="btn btn-sm btn-info text-white">مشاهده پیام</a>
+                                    </td>
+
+
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    @if (Model.TotalPage > 1)
+                    {
+                        <div id="paginationSection"
+                             data-controller-name="Contact"
+                             data-action-name="Index"
+                             data-keyword="@Model.Keyword"
+                             data-pageSize="@Model.PageSize"
+                             data-current-page="@Model.CurentPage"
+                             data-total-pages="@Model.TotalPage"
+                             data-parent="">
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

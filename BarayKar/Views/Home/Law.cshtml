@@ -1,0 +1,37 @@
+﻿@model TextViewModel
+@{
+    ViewData["Title"] = "قوانین سایت";
+}
+
+@section Style {
+    <link rel="stylesheet" href="~/main/css/custom/contact.css">
+}
+
+<section class="single-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="single-content">
+                    <h2>قوانین سایت</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/">صفحه اصلی</a>
+                        </li>
+
+                        <li class="breadcrumb-item text-white" aria-current="page">قوانین سایت</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="contact-part">
+    <div class="container">
+        <div class="row">
+            @if (string.IsNullOrEmpty(Model.Text) is false)
+            {
+                @Model.Text
+            }
+        </div>
+    </div>
+</section>

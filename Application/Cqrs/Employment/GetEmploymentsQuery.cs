@@ -18,7 +18,8 @@ using System.Threading.Tasks;
 
 namespace Application.Cqrs.Employment
 {
-    public class GetEmploymentsQuery:IRequest<PaginatedList<EmploymentViewModel>>
+    public class GetEmploymentsQuery
+        :IRequest<PaginatedList<EmploymentViewModel>>
     {
         public IPagination pagination { set; get; }
     }

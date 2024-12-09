@@ -15,7 +15,7 @@ namespace Infrastructure.Repositories
         public DapperRepository(ILogger<DapperRepository> logger)
         {
             _logger = logger;
-            _connection = new SqlConnection(Configuration.ConnectionOptions.ConnectionString);
+            _connection = new SqlConnection("Server=162.55.86.86,2022;Database=tetronjo_DataBase;User Id=tetronjo_Sm;Password=b40m&Q5z6;TrustServerCertificate=true;Trusted_Connection=True;Integrated Security=False;Encrypt=False;MultipleActiveResultSets=True");
         }
 
 

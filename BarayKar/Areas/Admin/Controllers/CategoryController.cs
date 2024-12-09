@@ -2,6 +2,7 @@
 using Application.Cqrs.Category;
 using BarayKar.Areas.Admin.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -9,6 +10,7 @@ namespace BarayKar.Areas.Admin.Controllers
 {
 
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class CategoryController (IMediator mediator): Controller
     {
         private readonly IMediator _mediator=mediator;

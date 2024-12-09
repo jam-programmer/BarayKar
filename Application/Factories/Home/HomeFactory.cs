@@ -1,6 +1,7 @@
 ﻿using Application.Common;
 using Application.Common.Interfaces;
 using Application.Common.Record;
+using Application.Common.Record.Home;
 using Application.Common.ViewModel.Business;
 using Application.Common.ViewModel.Employment;
 using Application.Common.ViewModel.Home;
@@ -25,6 +26,7 @@ namespace Application.Factories.Home
         private readonly ILogger<HomeFactory> _logger;
         private readonly IContext _context;
         private readonly IDistributedCache _cache;
+        private readonly IEfRepository<ContactEntity> _contactRepository;
         private readonly IEfRepository<ProvinceEntity> _provinceRepository;
         private readonly IEfRepository<SettingEntity> _settingRepository;
         private readonly IEfRepository<CategoryEntity> _categoryRepository;
@@ -41,12 +43,13 @@ namespace Application.Factories.Home
             IEfRepository<CategoryEntity> categoryRepository,
             IEfRepository<SettingEntity> settingRepository,
             IEfRepository<BusinessEntity> businessRepository,
+            IEfRepository<ContactEntity> contactRepository,
             SignInManager<UserEntity> signInManager,
             UserManager<UserEntity> userManager,
             RoleManager<RoleEntity> roleManager,
             IDistributedCache cache)
         {
-
+            _contactRepository = contactRepository;
             _logger = logger;
             _context = context;
             _cache = cache;
@@ -143,16 +146,17 @@ namespace Application.Factories.Home
         /// </summary>
         /// <param name="cancellation"></param>
         /// <returns></returns>
-        private async Task<SettingEntity> GetSettingFromCacheAsync
+        private async Task<SettingChached> GetSettingFromCacheAsync
             (CancellationToken cancellation = default)
         {
-            SettingEntity setting;
+            SettingChached setting;
 
 
             var settingCached = await _cache.GetAsync(CacheKey.SettinKey);
             if (settingCached == null)
             {
-                 setting = await _settingRepository.FirstOrDefaultAsync(cancellation);
+                var  settingdb = await _settingRepository.FirstOrDefaultAsync(cancellation);
+                setting = settingdb.Adapt<SettingChached>();
                 var serializedSetting = JsonSerializer.Serialize(setting);
                 byte[] settingEncoded = Encoding.UTF8.GetBytes(serializedSetting);
 
@@ -163,7 +167,7 @@ namespace Application.Factories.Home
             }
             else
             {
-                 setting = JsonSerializer.Deserialize<SettingEntity>
+                 setting = JsonSerializer.Deserialize<SettingChached>
                     (Encoding.UTF8.GetString(settingCached!))!;
             }
             return setting;
@@ -231,8 +235,14 @@ namespace Application.Factories.Home
             {
                 return Result.Fail(FailMessage.UserNotFound);
             }
+            string path = "/";
+            var userRoles=await _userManager.GetRolesAsync(user);
+            if (userRoles != null && userRoles.Any(a=>a== "Admin")) 
+            {
+                path = "/Admin/Dashboard";
+            }
             await _signInManager.SignInAsync(user, isPersistent: record.SavePassword);
-            return Result.Success();
+            return Result.Success(path);
         }
         /// <summary>
         /// 
@@ -379,6 +389,51 @@ namespace Application.Factories.Home
             var setting = await GetSettingFromCacheAsync(cancellation);
             info= setting.Adapt<InfoContactFooterViewModel>();
             return info;
+        }
+
+        public async Task<Result> AddContactMessageAsync(AddContactRecord record, 
+            CancellationToken cancellation = default)
+        {
+            ContactEntity contact = record.Adapt<ContactEntity>();
+            try
+            {
+              await _contactRepository.InsertAsync(contact,cancellation);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"هنگام ثبت پیام خطایی رخ داده است. - {ex.Message}");
+                return Result.Fail();
+            }
+            return Result.Success();
+        }
+
+        public async Task<ContactViewModel>
+            GetContactUsInformationAsync(CancellationToken cancellation = default)
+        {
+            var setting=await GetSettingFromCacheAsync(cancellation);
+            ContactViewModel contact = new();
+            if (setting == null)
+            {
+                return contact;
+            }
+             contact = setting.Adapt<ContactViewModel>();
+            return contact;
+        }
+
+        public async Task<TextViewModel> GetLawAsync(CancellationToken cancellation = default)
+        {
+            TextViewModel text = new TextViewModel();
+            var setting = await _settingRepository.FirstOrDefaultAsync(cancellation);
+            text.Text=setting.Law;
+            return text;
+        }
+
+        public async Task<TextViewModel> GetAboutAsync(CancellationToken cancellation = default)
+        {
+            TextViewModel text = new TextViewModel();
+            var setting = await _settingRepository.FirstOrDefaultAsync(cancellation);
+            text.Text = setting.About;
+            return text;
         }
     }
 }

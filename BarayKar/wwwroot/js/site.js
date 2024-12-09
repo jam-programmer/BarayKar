@@ -12,9 +12,10 @@ function RandomId() {
     }
     return id
 }
- function SendEmploymentRequest(id) {
+  function SendEmploymentRequest(id) {
    
      rest.postAsync("/Employment/SendRequest", null, id, function (isSuccess, response) {
+      
         if (response.isSuccess) {
             Swal.fire({
                 title: "درخواست ارسال شد",
@@ -199,3 +200,42 @@ function ChangeRequestStatus(id) {
     document.body.appendChild(modal);
 }
 
+
+function SendContactMessage() {
+    var fullNameInput = document.getElementById("fullName");
+    var phoneNumberInput = document.getElementById("phoneNumber");
+    var subjectInput = document.getElementById("subject");
+    var messageInput = document.getElementById("message");
+    if (fullNameInput.value === '' || phoneNumberInput.value === '') {
+        Swal.fire({
+            title: "عدم تکمیل اطلاعات",
+            text: "لطفا نام و نام خانوادگی را به همراه شماره تماس وارد نمائید.",
+            icon: "question",
+            confirmButtonText: "متوجه شدم",
+        });
+        return;
+    }
+    var body = {
+        FullName: fullNameInput.value,
+        PhoneNumber: phoneNumberInput.value,
+        Message: messageInput.value,
+        Subject: subjectInput.value,
+    };
+    rest.postAsync("/Home/SendContactMessage", null, body, function (isSuccess, response) {
+        if (isSuccess) {
+            Swal.fire({
+                title: "پیام شما ارسال شد",
+                icon: "success",
+                confirmButtonText: "متوجه شدم"
+            });
+        } else {
+
+            Swal.fire({
+                title: "پیام شما ارسال نشد",
+                icon: "warning",
+                confirmButtonText: "متوجه شدم"
+            });
+        }
+    });
+
+}

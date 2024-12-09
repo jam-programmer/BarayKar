@@ -6,7 +6,7 @@ namespace BarayKar.Areas.User.Component
     {
         public async Task<IViewComponentResult> InvokeAsync()
         {
-
+            
            
             return View("~/Areas/User/Views/Shared/ViewComponent/UserDashboardMenuSection.cshtml");
         }

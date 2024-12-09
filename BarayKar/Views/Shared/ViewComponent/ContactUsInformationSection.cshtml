@@ -1,0 +1,29 @@
+﻿@model ContactViewModel
+
+<div class="col-lg-4">
+    <div class="contact-info">
+        <i class="fas fa-map-marker-alt"></i>
+        <h3>پیدا کردن</h3>
+        <p>
+           @Model.Address
+        </p>
+    </div>
+</div>
+<div class="col-lg-4">
+    <div class="contact-info">
+        <i class="fas fa-phone-alt"></i>
+        <h3>در تماس باشید</h3>
+        <p>
+            @Model.Number
+        </p>
+    </div>
+</div>
+<div class="col-lg-4">
+    <div class="contact-info">
+        <i class="fas fa-envelope"></i>
+        <h3>ارسال ایمیل</h3>
+        <p>
+            @Model.Email
+        </p>
+    </div>
+</div>

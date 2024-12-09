@@ -35,6 +35,7 @@ namespace Infrastructure.Configuration.Contexts
         public virtual DbSet<EducationalRecordEntity> EducationalRecord { set; get; }
         public virtual DbSet<ResumeEntity> Resume { set; get; }
         public virtual DbSet<EmploymentRequestEntity> EmploymentRequest { set; get; }
+        public virtual DbSet<ContactEntity> Contact { set; get; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -42,7 +43,8 @@ namespace Infrastructure.Configuration.Contexts
             builder.HasSequence<long>("CodeGenerator")
                .StartsAt(100).IncrementsBy(2).HasMax(long.MaxValue);
 
-            foreach(var relation in builder.Model.GetEntityTypes().SelectMany(s=>s.GetForeignKeys()))
+            foreach(var relation in builder.Model.GetEntityTypes().
+                SelectMany(s=>s.GetForeignKeys()))
             {
                 relation.DeleteBehavior = DeleteBehavior.NoAction;
             }

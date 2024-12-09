@@ -1,4 +1,5 @@
-﻿//function createModalRequestEmployment() {
+﻿
+//function createModalRequestEmployment() {
 //    // Create modal div
 //    var modalDiv = document.createElement('div');
 //    modalDiv.classList.add('modal', 'fade');

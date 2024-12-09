@@ -1,10 +1,12 @@
 ﻿using Application.Cqrs.Setting;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BarayKar.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class SettingController (IMediator mediator): Controller
     {
         private readonly IMediator _mediator=mediator;

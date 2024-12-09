@@ -22,14 +22,14 @@
                     <h3>اطلاعات </h3>
                     <ul class="footer-widget">
                         <li>
-                            <a href="#">درباره ما</a>
+                            <a asp-controller="Home" asp-action="AboutUs">درباره ما</a>
                         </li>
                       
                         <li>
-                            <a href="#">تماس با ما</a>
+                            <a asp-controller="Home" asp-action="ContactUs">تماس با ما</a>
                         </li>
                         <li>
-                            <a href="#">قوانین سایت</a>
+                            <a asp-controller="Home" asp-action="Law">قوانین سایت</a>
                         </li>
                     </ul>
                 </div>
@@ -77,7 +77,7 @@
         <div class="container">
             <div class="footer-end-content">
                 <p>
-                    کلیه حقوق سایت برای سمانه سادات نجفیان رضوی محفوظ است. طراحی و توسعه :<a href="https://darnogroup.com/">گروه فنی و مهندسی دارنو</a>
+                    کلیه حقوق سایت برای سمانه سادات نجفیان رضوی محفوظ است. 
                 </p>
                 @await Component.InvokeAsync("SocialFooterComponent")
             </div>

@@ -464,6 +464,31 @@ namespace Infrastructure.Migrations
                     b.ToTable("City");
                 });
 
+            modelBuilder.Entity("Domain.Entities.System.ContactEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(700)
+                        .HasColumnType("nvarchar(700)");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Contact");
+                });
+
             modelBuilder.Entity("Domain.Entities.System.Identity.RoleClaimEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -689,6 +714,9 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("About")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("AboutSectionDescription")
                         .HasColumnType("nvarchar(max)");
 
@@ -725,6 +753,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Instagram")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Law")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Linkdin")
                         .HasColumnType("nvarchar(max)");
 
@@ -759,7 +790,7 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9452cc01-ef5d-4db7-97c8-b0312dff0152")
+                            Id = new Guid("b78bcf18-07d0-48bb-ab83-8f1b544a37bf")
                         });
                 });
 

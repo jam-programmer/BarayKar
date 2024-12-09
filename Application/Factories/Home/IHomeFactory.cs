@@ -1,6 +1,7 @@
 ﻿
 using Application.Common;
 using Application.Common.Record;
+using Application.Common.Record.Home;
 using Application.Common.ViewModel.Business;
 using Application.Common.ViewModel.Employment;
 using Application.Common.ViewModel.Home;
@@ -35,5 +36,13 @@ namespace Application.Factories.Home
         Task<SocialFooterViewModel>GetSocialsAsync(CancellationToken cancellation = default);
 
         Task<InfoContactFooterViewModel> GetInfoContactAsync(CancellationToken cancellation = default);
+
+
+        Task<Result> AddContactMessageAsync(AddContactRecord record, CancellationToken cancellation = default);
+        Task<ContactViewModel>GetContactUsInformationAsync(CancellationToken cancellation = default);
+
+
+        Task<TextViewModel>GetLawAsync(CancellationToken cancellation = default);
+        Task<TextViewModel>GetAboutAsync(CancellationToken cancellation = default);
     }
 }

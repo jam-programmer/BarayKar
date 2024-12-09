@@ -25,7 +25,7 @@ namespace BarayKar.Controllers
                 var result = await _homeFactory.SignInAsync(record);
                 if (result.IsSuccess)
                 {
-                    return Redirect("/");
+                    return Redirect((string)result.Data!);
                 }
                 ViewBag.Alert = result.Message!.FirstOrDefault();
             }

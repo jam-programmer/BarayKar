@@ -104,7 +104,7 @@
 
                             <td>
                                 <a onclick="ChangeRequestStatus('@item.Id')" class="p-1 btn btn-sm btn-info text-white">تغییر وضعیت</a>
-                                <a class="p-1 btn btn-sm btn-primary text-white">مشاهده رزومه</a>
+                                <a asp-controller="Dashboard" asp-action="GeneratePDF" asp-route-id="@item.ResumeId" class="p-1 btn btn-sm btn-primary text-white">مشاهده رزومه</a>
                             </td>
                             }
                         </tbody>

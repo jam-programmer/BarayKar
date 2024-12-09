@@ -18,6 +18,7 @@
     <PackageReference Include="NLog" Version="5.3.2" />
     <PackageReference Include="NLog.Database" Version="5.3.2" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.11" />
+    <PackageReference Include="NReco.PdfGenerator" Version="1.2.1" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.4" />
     <PackageReference Include="SixLabors.ImageSharp.Web" Version="3.1.2" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
@@ -25,6 +26,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\Config\" />
   </ItemGroup>
 
 </Project>
