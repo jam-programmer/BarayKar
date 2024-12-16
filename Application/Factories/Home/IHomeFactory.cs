@@ -22,6 +22,7 @@ namespace Application.Factories.Home
             GetLastEmploymentAsync(CancellationToken cancellation = default);
 
         Task<Result>SignInAsync(SignInRecord record,CancellationToken cancellation = default);
+        Task<Result> OtpSignInAsync(string userName, CancellationToken cancellation = default);
         Task SignOutAsync();
         Task<Result> SignUpAsync(SignUpRecord record, CancellationToken cancellation = default);
       

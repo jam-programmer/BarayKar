@@ -5,13 +5,18 @@ using Microsoft.AspNetCore.Mvc;
 using NLog;
 using System.Diagnostics;
 using NReco.PdfGenerator;
+using Application.Services.SMS;
+using Application.Factories.User;
 namespace BarayKar.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHomeFactory _homeFactory;
-        public HomeController(ILogger<HomeController> logger, IHomeFactory homeFactory)
+
+
+        public HomeController(ILogger<HomeController> logger,
+            IHomeFactory homeFactory)
         {
             _homeFactory = homeFactory;
             _logger = logger;
@@ -19,8 +24,6 @@ namespace BarayKar.Controllers
 
         public IActionResult Index()
         {
-
-
             return View();
         }
         public async Task<IActionResult> Law()
@@ -52,5 +55,6 @@ namespace BarayKar.Controllers
                 return BadRequest();
             }
         }
+
     }
 }

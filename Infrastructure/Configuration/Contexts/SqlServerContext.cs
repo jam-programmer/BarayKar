@@ -36,6 +36,7 @@ namespace Infrastructure.Configuration.Contexts
         public virtual DbSet<ResumeEntity> Resume { set; get; }
         public virtual DbSet<EmploymentRequestEntity> EmploymentRequest { set; get; }
         public virtual DbSet<ContactEntity> Contact { set; get; }
+        public virtual DbSet<OtpCodeVerificationEntity> OtpCodeVerification { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder builder)

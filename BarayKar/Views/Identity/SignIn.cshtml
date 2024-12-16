@@ -4,9 +4,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section Style {
+    <link href="/lib/sweet-alert/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+}
+
 @section Script {
   
     <partial name="_ValidationScriptsPartial" />
+    <script src="/lib/sweet-alert/sweetalert2.all.min.js"></script>
+    <script src="/js/OtpLogin.js"></script>
 }
 <section style="background-image:url('/assets/img/pages/profile-banner.png')">
     <div class="container" >
@@ -57,7 +63,8 @@
                             </div>
 
                             <div class="form-group mt-3">
-                                <button type="submit" class="bg-primary btn btn-sm text-white  ">ورود</button>
+                                <button type="submit" class="bg-primary btn btn-sm text-white">ورود</button>
+                                <button type="button" onclick="modalOtp()" class="bg-primary btn btn-sm text-white">ورود با رمز یک بار مصرف</button>
                             </div>
                            
                         </form>
@@ -67,3 +74,50 @@
         </div>
     </div>
 </section>
+
+<!-- Modal -->
+<div class="modal fade" id="otpLogin" tabindex="-1" role="dialog" aria-labelledby="otpLogin" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ورود با رمز یکبار مصرف</h5>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12 col-sm-12 col-lg-12 col-12 mb-2">
+                    <label style="font-weight: bold !important">کدملی یا شماره تلفن همراه را وارد نمایید</label>
+                </div>
+                <div class="col-md-12 col-sm-12 col-lg-12 col-12 mb-2">
+                    <input type="text" id="userName" class="form-control" />
+                </div>
+                <div class="col-md-12 col-sm-12 col-lg-12 col-12 mb-2">
+                    <button type="button" id="btn-otp-send" onclick="sendOtp()" class="btn bg-primary w-100 d-flex justify-content-center align-items-center">
+                        ارسال کد
+                        <div class="spinner-border text-warning mr-2 d-none" id="spinner-send-otp" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </button>
+                </div>
+                <div class="col-md-12 col-sm-12 col-lg-12 col-12 mb-2 d-none" id="div-counter">
+                    <span style="font-size: 0.8rem !important">امکان ارسال مجدد کد فعال سازی تا <span class="text-danger" id="counter-spn">20</span> ثانیه دیگر</span>
+                </div>
+                <div class="col-md-12 col-sm-12 col-lg-12 col-12 mb-2">
+                    <label style="font-weight: bold !important">ورود کد پیامک شده</label>
+                </div>
+                <div class="col-md-12 col-sm-12 col-lg-12 col-12 mb-2">
+                    <input type="text" disabled="true" maxlength="6" id="otpCode" class="form-control text-center" />
+                </div>
+                <div class="col-md-12 col-sm-12 col-lg-12 col-12">
+                    <button type="button" onclick="login()" id="btn-send-otp-code-login" class="btn bg-primary w-100 d-flex justify-content-center align-items-center">
+                        ورود
+                        <div class="spinner-border text-warning mr-2 d-none" id="spinner-send-otp-btn" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-primary" data-dismiss="modal">خروج</button>
+            </div>
+        </div>
+    </div>
+</div>

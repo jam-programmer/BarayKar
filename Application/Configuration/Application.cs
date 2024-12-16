@@ -4,6 +4,7 @@ using Application.Factories.Employment;
 using Application.Factories.Home;
 using Application.Factories.User;
 using Application.Services.Role;
+using Application.Services.SMS;
 using Application.Services.User;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +28,7 @@ namespace Application.Configuration
             service.AddScoped<IUserFactory, UserFactory>();
             service.AddScoped<IBusinessFactory, BusinessFactory>();
             service.AddScoped<IEmploymentFactory, EmploymentFactory>();
+            service.AddScoped<ISMSRepository, SMSRepository>();
             return service;
         }
     }

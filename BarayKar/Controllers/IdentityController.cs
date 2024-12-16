@@ -1,12 +1,14 @@
 ﻿using Application.Common.Record;
 using Application.Factories.Home;
+using Application.Factories.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BarayKar.Controllers
 {
-    public class IdentityController (IHomeFactory factory): Controller
+    public class IdentityController (IHomeFactory factory, IUserFactory userFactory) : Controller
     {
         private readonly IHomeFactory _homeFactory = factory;
+        private readonly IUserFactory _userFactory = userFactory;
 
         [HttpGet]
         public IActionResult SignIn()
@@ -69,6 +71,34 @@ namespace BarayKar.Controllers
             return View(record);
         }
 
-       
+        [HttpPost]
+        public async Task<IActionResult> SendOtpCode(string userName)
+        {
+            var result = await _userFactory.SendOtpCode(userName);
+            if(result.IsSuccess)
+                return Ok(result);
+            return BadRequest(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LoginOtp(string userName, string code)
+        {
+            var result = await _userFactory.CheckOtpCode(userName, code);
+            if (result.IsSuccess)
+            {
+                var resultSignInOtp = await _homeFactory.OtpSignInAsync(userName);
+                if (resultSignInOtp.IsSuccess)
+                {
+                    return Ok(resultSignInOtp);
+                }
+                else
+                {
+                    return BadRequest(resultSignInOtp);
+                }
+            }
+
+            return BadRequest(result);
+        }
+
     }
 }

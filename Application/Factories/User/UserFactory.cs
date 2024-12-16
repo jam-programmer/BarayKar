@@ -6,16 +6,19 @@ using Application.Common.Record.UserPanel;
 using Application.Common.ViewModel;
 using Application.Common.ViewModel.User;
 using Application.Core;
+using Application.Services.SMS;
 using Domain.Entities.Business;
 using Domain.Entities.Employment;
 using Domain.Entities.Resume;
 using Domain.Entities.System.Identity;
 using Domain.Enum;
 using Mapster;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using System.Threading;
 
 namespace Application.Factories.User
 {
@@ -30,9 +33,11 @@ namespace Application.Factories.User
         private readonly IEfRepository<BusinessEntity> _businessRepository;
         private readonly IEfRepository<EmploymentEntity> _employmentRepository;
         private readonly IEfRepository<EmploymentRequestEntity> _employmentRequestRepsitory;
+        private readonly IEfRepository<OtpCodeVerificationEntity> _otpCodeVerificationrepository;
         private readonly ILogger<UserFactory> _logger;
         private readonly IContext _context;
         private readonly UserManager<UserEntity> _userManager;
+        private readonly ISMSRepository _SMSRepository;
 
         public UserFactory(UserManager<UserEntity> userManager, IContext
             context, ILogger<UserFactory> logger,
@@ -44,7 +49,9 @@ namespace Application.Factories.User
             IEfRepository<ResumeEntity> resumeRepository,
              IEfRepository<EducationalRecordEntity> educationRepository,
             IEfRepository<WorkExperienceEntity> experienceRepository,
-            IEfRepository<EmploymentRequestEntity> employmentRequestRepsitory
+            IEfRepository<EmploymentRequestEntity> employmentRequestRepsitory,
+            IEfRepository<OtpCodeVerificationEntity> otpCodeVerificationrepository,
+            ISMSRepository SMSRepository
             )
         {
             _logger = logger;
@@ -59,6 +66,8 @@ namespace Application.Factories.User
             _educationRepository = educationRepository;
             _experienceRepository = experienceRepository;
             _employmentRequestRepsitory = employmentRequestRepsitory;
+            _SMSRepository = SMSRepository;
+            _otpCodeVerificationrepository = otpCodeVerificationrepository;
         }
 
         private delegate Task<Result> ChangeResumeEvent(string json, Guid UserId, CancellationToken cancellation);
@@ -917,6 +926,98 @@ namespace Application.Factories.User
             RequestResumeViewModel resume = new();
             resume = model!.Adapt<RequestResumeViewModel>();
             return Result.Success(resume);
+        }
+
+        public async Task<Result> SendOtpCode(string UserName, CancellationToken cancellation = default)
+        {
+            UserEntity user = null;
+            var isPhoneNumber = ValidationHelper.IsPhoneNumber(UserName);
+            if (isPhoneNumber)
+            {
+                var resultPhoneNumber = await _userManager.Users.FirstOrDefaultAsync(p=> p.PhoneNumber == UserName);
+                if (resultPhoneNumber != null)
+                    user = resultPhoneNumber;
+            }
+            else
+            {
+                var isNationalCode = ValidationHelper.IsNationalCode(UserName);
+                if (isNationalCode)
+                {
+                    var resultNationalCode = await _userManager.Users.FirstOrDefaultAsync(p=> p.UserName == UserName);
+                    if (resultNationalCode != null)
+                        user = resultNationalCode;
+                }
+            }
+
+            if (user == null)
+                return Result.Fail("هیچ کاربری با مشخصات وارد شده یافت نشد");
+
+            if (string.IsNullOrEmpty(user.PhoneNumber))
+                return Result.Fail("هیچ شماره تلفنی برای کاربر ثبت نشده است");
+
+            var resultOtp = await _otpCodeVerificationrepository.GetByQueryAsync();
+            var userOtp = resultOtp.Where(p => p.UserId == user.Id).ToList();
+            if(userOtp.Count != 0)
+                await _otpCodeVerificationrepository.DeleteListAsync(userOtp);
+
+            var otpCode = Generator.GetOtpCode();
+            await _otpCodeVerificationrepository.InsertAsync(new OtpCodeVerificationEntity
+            {
+                Code = otpCode,
+                ExpireTime = DateTime.UtcNow.AddMinutes(5),
+                IsUsed = false,
+                UserId = user.Id,
+            }, cancellation);
+
+            var resultSendSMS = await _SMSRepository.SendMessage(user.PhoneNumber, $"کد فعال سازی شما: {otpCode}\nمدت اعتبار کد 5 دقیقه");
+            if(resultSendSMS)
+                return Result.Success("پیامک بازیابی رمز عبور با موفقیت ارسال شد");
+
+            return Result.Fail("در ارسال پیامک بازیابی رمز عبور خطایی رخ داده است");
+        }
+
+        public async Task<Result> CheckOtpCode(string UserName, string otpCode, CancellationToken cancellation = default)
+        {
+            UserEntity user = null;
+            var isPhoneNumber = ValidationHelper.IsPhoneNumber(UserName);
+            if (isPhoneNumber)
+            {
+                var resultPhoneNumber = await _userManager.Users.FirstOrDefaultAsync(p => p.PhoneNumber == UserName);
+                if (resultPhoneNumber != null)
+                    user = resultPhoneNumber;
+            }
+            else
+            {
+                var isNationalCode = ValidationHelper.IsNationalCode(UserName);
+                if (isNationalCode)
+                {
+                    var resultNationalCode = await _userManager.Users.FirstOrDefaultAsync(p => p.UserName == UserName);
+                    if (resultNationalCode != null)
+                        user = resultNationalCode;
+                }
+            }
+
+            if (user == null)
+                return Result.Fail("کد وارد شده نامعتبر می باشد");
+
+            if (string.IsNullOrEmpty(user.PhoneNumber))
+                return Result.Fail("کد وارد شده نامعتبر می باشد");
+
+            var resultOtp = await _otpCodeVerificationrepository.GetByQueryAsync();
+            var userOtp = resultOtp.Where(p => p.UserId == user.Id && p.IsUsed == false).FirstOrDefault();
+            if (userOtp == null)
+                return Result.Fail("کد وارد شده نامعتبر می باشد");
+
+            if(userOtp.Code == otpCode)
+            {
+                var userOtpUsed = resultOtp.Where(p => p.UserId == user.Id).ToList();
+                if(userOtpUsed.Count != 0)
+                    await _otpCodeVerificationrepository.DeleteListAsync(userOtpUsed);
+
+                return Result.Success("احراز هویت با موفقیت انجام شد");
+            }
+
+            return Result.Fail("کد وارد شده نامعتبر می باشد");
         }
     }
 }

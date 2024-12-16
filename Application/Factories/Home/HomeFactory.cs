@@ -1,4 +1,5 @@
 ﻿using Application.Common;
+using Application.Common.Extension;
 using Application.Common.Interfaces;
 using Application.Common.Record;
 using Application.Common.Record.Home;
@@ -434,6 +435,48 @@ namespace Application.Factories.Home
             var setting = await _settingRepository.FirstOrDefaultAsync(cancellation);
             text.Text = setting.About;
             return text;
+        }
+
+        public async Task<Result> OtpSignInAsync(string userName, CancellationToken cancellation = default)
+        {
+            UserEntity user = null;
+            var isPhoneNumber = ValidationHelper.IsPhoneNumber(userName);
+            if (isPhoneNumber)
+            {
+                var resultPhoneNumber = await _userManager.Users.FirstOrDefaultAsync(p => p.PhoneNumber == userName);
+                if (resultPhoneNumber != null)
+                    user = resultPhoneNumber;
+            }
+            else
+            {
+                var isNationalCode = ValidationHelper.IsNationalCode(userName);
+                if (isNationalCode)
+                {
+                    var resultNationalCode = await _userManager.Users.FirstOrDefaultAsync(p => p.UserName == userName);
+                    if (resultNationalCode != null)
+                        user = resultNationalCode;
+                }
+            }
+
+            if (user == null)
+                return Result.Fail(FailMessage.UserNotFound);
+
+            if (user.PhoneNumberConfirmed is false || user.EmailConfirmed is false)
+            {
+                return Result.Fail(FailMessage.AccountNotActive);
+            }
+
+            string path = "/";
+            var userRoles = await _userManager.GetRolesAsync(user);
+            if (userRoles != null && userRoles.Any(a => a == "Admin"))
+            {
+                path = "/Admin/Dashboard";
+            }
+
+            await _signInManager.SignInAsync(user, true);
+
+            return Result.Success(path);
+
         }
     }
 }

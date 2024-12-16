@@ -61,5 +61,8 @@ namespace Application.Factories.User
         Task<List<EmploymentRequestAlertViewModel>> 
             GetEmploymentRequestAlertAsync(Guid UserId,CancellationToken cancellation=default);
         Task<Result> GetResumeForPdfGeneratorAsync(Guid Id, CancellationToken cancellation = default);
+
+        Task<Result> SendOtpCode(string UserName, CancellationToken cancellation = default);
+        Task<Result> CheckOtpCode(string UserName,string otpCode, CancellationToken cancellation = default);
     }
 }
