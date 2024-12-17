@@ -6,6 +6,12 @@
 
 @section Style {
     <link href="/lib/sweet-alert/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        .btn-otp{
+            border: none !important;
+            color: white !important;
+        }
+    </style>
 }
 
 @section Script {
@@ -90,7 +96,7 @@
                     <input type="text" id="userName" class="form-control" />
                 </div>
                 <div class="col-md-12 col-sm-12 col-lg-12 col-12 mb-2">
-                    <button type="button" id="btn-otp-send" onclick="sendOtp()" class="btn bg-primary w-100 d-flex justify-content-center align-items-center">
+                    <button type="button" id="btn-otp-send" onclick="sendOtp()" class="btn bg-primary w-100 d-flex justify-content-center align-items-center btn-otp">
                         ارسال کد
                         <div class="spinner-border text-warning mr-2 d-none" id="spinner-send-otp" role="status">
                             <span class="sr-only">Loading...</span>
@@ -107,7 +113,7 @@
                     <input type="text" disabled="true" maxlength="6" id="otpCode" class="form-control text-center" />
                 </div>
                 <div class="col-md-12 col-sm-12 col-lg-12 col-12">
-                    <button type="button" onclick="login()" id="btn-send-otp-code-login" class="btn bg-primary w-100 d-flex justify-content-center align-items-center">
+                    <button type="button" onclick="login()" id="btn-send-otp-code-login" class="btn bg-primary w-100 d-flex justify-content-center align-items-center btn-otp">
                         ورود
                         <div class="spinner-border text-warning mr-2 d-none" id="spinner-send-otp-btn" role="status">
                             <span class="sr-only">Loading...</span>
@@ -116,7 +122,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn bg-primary" data-dismiss="modal">خروج</button>
+                <button type="button" class="btn bg-primary btn-otp" data-dismiss="modal">خروج</button>
             </div>
         </div>
     </div>
